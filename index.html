@@ -1367,7 +1367,10 @@ function updateProgress(){const n=Object.keys(score).length;$('progTxt').textCon
   document.querySelectorAll('[data-tick]').forEach(t=>{const d=t.dataset.tick in score;t.classList.toggle('done',d);t.title=d?'已完成':'未完成';});}
 updateProgress();
 let CUR='home';
-function route(){let r=(location.hash||'').slice(1);if(!VIEWS[r]){const el=r&&document.getElementById(r);const host=el&&el.closest('.view');r=host?host.dataset.route:'home';}
+function clearHash(){if(!location.hash)return;try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}
+document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a||e.ctrlKey||e.metaKey||e.shiftKey)return;const t=a.getAttribute('href').slice(1);
+  if(!t)return;e.preventDefault();route(t);});
+function route(target){let r=target!=null?target:(location.hash||'').slice(1);if(!VIEWS[r]){const el=r&&document.getElementById(r);const host=el&&el.closest('.view');r=host?host.dataset.route:'home';}
   const changed=r!==CUR||!route.done;route.done=true;CUR=r;
   Object.entries(VIEWS).forEach(([k,v])=>{v.hidden=k!==r;});
   document.querySelectorAll('.nav-item').forEach(a=>a.classList.toggle('on',a.dataset.r===r));
@@ -1375,12 +1378,12 @@ function route(){let r=(location.hash||'').slice(1);if(!VIEWS[r]){const el=r&&do
   $('app').classList.remove('nav-open');
   if(changed)window.scrollTo(0,0);
   charts.forEach(rec=>{if(VIEWS[r].contains(rec.el)){if(rec.dirty||!rec.chart)render(rec);else rec.chart.resize();}});
-  onScroll();}
+  clearHash();onScroll();}
 function onScroll(){const h=document.documentElement.scrollHeight-window.innerHeight;$('pagebar').style.width=(h>0?Math.min(100,window.scrollY/h*100):0)+'%';
   const toc=VIEWS[CUR]&&VIEWS[CUR].querySelector('.ch-toc');if(!toc||!toc._targets)return;let k=0;toc._targets.forEach((el,i)=>{if(el.getBoundingClientRect().top<160)k=i;});
   toc.querySelectorAll('button').forEach((b,i)=>b.classList.toggle('on',i===k));}
 let tick=false;window.addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(()=>{onScroll();tick=false;});}},{passive:true});
-window.addEventListener('hashchange',route);
+window.addEventListener('hashchange',()=>route());
 $('menuBtn').addEventListener('click',()=>$('app').classList.add('nav-open'));
 $('scrim').addEventListener('click',()=>$('app').classList.remove('nav-open'));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('app').classList.remove('nav-open');});
