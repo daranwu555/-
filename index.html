@@ -1,0 +1,1393 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>風險傳導鏈</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="用五個總經指標,看懂市場從資金緊縮到恐慌的傳導順序。互動教材,含 2000 年至今真實數據。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: 一條垂直的「傳導管線」— 頁首狀態鏈 → 五層章節(由慢到快)→ 回放 → 現況。冷色儀表紙面,鈷藍為主色,金屬金只留給黃金。 */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --surface-2:#eaeef4;
+  --ink:#111623; --ink-2:#465063; --muted:#7d8597;
+  --line:#dde2ea; --grid:#e6e9ef; --axis:#c3c9d4;
+  --accent:#2747d0; --accent-soft:rgba(39,71,208,.09); --metal:#a8750b;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s7:#6250d6;
+  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+  --band:rgba(125,133,151,.10); --band-crit:rgba(208,59,59,.10);
+  --f-display:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --r:10px; --shadow:0 1px 2px rgba(17,22,35,.05),0 8px 24px -12px rgba(17,22,35,.12);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1016; --surface:#151a23; --surface-2:#1c2330;
+  --ink:#eef1f6; --ink-2:#b4bccb; --muted:#7f8899;
+  --line:#262e3c; --grid:#1f2633; --axis:#343d4d;
+  --accent:#7b95ff; --accent-soft:rgba(123,149,255,.12); --metal:#e2ad43;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s7:#9085e9;
+  --band:rgba(160,170,190,.08); --band-crit:rgba(230,103,103,.13);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.6); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1016; --surface:#151a23; --surface-2:#1c2330;
+  --ink:#eef1f6; --ink-2:#b4bccb; --muted:#7f8899;
+  --line:#262e3c; --grid:#1f2633; --axis:#343d4d;
+  --accent:#7b95ff; --accent-soft:rgba(123,149,255,.12); --metal:#e2ad43;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s7:#9085e9;
+  --band:rgba(160,170,190,.08); --band-crit:rgba(230,103,103,.13);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.6); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--surface)}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--accent)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.num,.mono{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+
+/* ---------- app shell: course sidebar + page ---------- */
+.app{display:grid;grid-template-columns:276px minmax(0,1fr);min-height:100%}
+.side{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;height:100dvh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;padding:22px 14px 18px max(14px,env(safe-area-inset-left,0px));scrollbar-width:thin}
+.brand{font-family:var(--f-display);font-weight:900;font-size:21px;letter-spacing:.04em;white-space:nowrap;text-decoration:none;color:var(--ink);padding:0 10px}
+.brand span{color:var(--accent)}
+.brand-sub{font-size:12px;color:var(--muted);padding:2px 10px 0}
+.course-prog{margin:18px 10px 6px;font-size:12px;color:var(--ink-2)}
+.course-prog .bar{height:6px;border-radius:3px;background:var(--surface-2);margin-top:6px;overflow:hidden}
+.course-prog .bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.nav-group{margin-top:16px}
+.nav-label{font-size:11px;letter-spacing:.14em;color:var(--muted);padding:0 10px 6px;font-weight:500}
+.nav-item{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:2px 8px;align-items:center;text-decoration:none;color:var(--ink-2);
+  padding:8px 10px;border-radius:8px;transition:background .15s,color .15s;position:relative}
+.nav-item:hover{background:var(--surface-2);color:var(--ink)}
+.nav-item .nk{font-family:var(--f-data);font-size:12px;color:var(--muted);text-align:center}
+.nav-item .nt{font-size:14px;font-weight:500;line-height:1.35}
+.nav-item .ns{grid-column:2;font-size:11.5px;color:var(--muted);line-height:1.3}
+.nav-item .nd{grid-row:1/span 2;grid-column:3;display:flex;gap:6px;align-items:center}
+.nav-item.on{background:var(--accent-soft);color:var(--accent)}
+.nav-item.on .nk,.nav-item.on .nt{color:var(--accent);font-weight:700}
+.nav-item.on::before{content:"";position:absolute;left:-14px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--accent)}
+.dot{width:8px;height:8px;display:inline-block}
+.dot.s0{background:var(--good);border-radius:50%}
+.dot.s1{background:var(--warn);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.dot.s2{background:var(--crit);border-radius:1px}
+.tick{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--axis);display:inline-grid;place-items:center;font-size:10px;color:transparent}
+.tick.done{background:var(--good);border-color:var(--good);color:#fff}
+.side-foot{margin-top:auto;padding:16px 10px 0;font-size:11.5px;color:var(--muted);line-height:1.6}
+.mbar{display:none}
+.scrim{display:none}
+.pagebar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;height:3px;background:transparent}
+.pagebar i{display:block;height:100%;width:0;background:var(--accent);opacity:.8}
+.view[hidden]{display:none!important}
+.view{animation:viewIn .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes viewIn{from{opacity:.001;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.crumb{font-size:12.5px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-top:36px}
+.crumb a{color:var(--muted);text-decoration:none}
+.crumb a:hover{color:var(--accent)}
+.crumb .meta{margin-left:auto;font-family:var(--f-data);font-size:11.5px}
+
+/* chapter page: content + on-page TOC */
+.ch-layout{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:40px;align-items:start}
+.ch-toc{position:sticky;top:28px;font-size:13px;border-left:1px solid var(--line);padding-left:14px;margin-top:40px}
+.ch-toc .tl{font-size:11px;letter-spacing:.14em;color:var(--muted);margin-bottom:8px}
+.ch-toc button{display:block;width:100%;text-align:left;background:none;border:0;padding:5px 0 5px 10px;margin-left:-15px;border-left:2px solid transparent;color:var(--ink-2);cursor:pointer;font-size:13px;line-height:1.5}
+.ch-toc button:hover{color:var(--ink)}
+.ch-toc button.on{color:var(--accent);border-left-color:var(--accent);font-weight:700}
+
+/* pager */
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:56px}
+.pager a{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:16px 18px;transition:border-color .2s,transform .2s}
+.pager a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.pager .pd{font-size:12px;color:var(--muted)}
+.pager .pt{font-weight:700;font-size:16px;margin-top:2px}
+.pager .next{text-align:right;grid-column:2}
+.pager .pt .ar{color:var(--accent);font-family:var(--f-data)}
+
+/* home: learning path */
+.path{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:20px}
+.step{display:grid;grid-template-columns:52px minmax(0,1fr);gap:4px 14px;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+  transition:border-color .2s,transform .2s,box-shadow .2s;position:relative}
+.step:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
+.step .sn{grid-row:span 3;font-family:var(--f-display);font-weight:900;font-size:40px;line-height:1;color:var(--accent)}
+.step .sl{font-size:11.5px;color:var(--muted);letter-spacing:.08em}
+.step .st2{font-weight:700;font-size:16.5px;line-height:1.4}
+.step .sd{font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.step .sm{grid-column:2;display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px;font-size:12px;color:var(--muted)}
+.step.wide{grid-column:1/-1}
+.cta{display:inline-flex;align-items:center;gap:10px;margin-top:26px;background:var(--accent);color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:10px;font-size:15.5px;transition:filter .2s,transform .2s}
+.cta:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.cta .ar{font-family:var(--f-data)}
+
+/* ---------- hero ---------- */
+.hero{padding-block:56px 40px}
+.eyebrow{font-size:13px;letter-spacing:.14em;color:var(--muted);font-weight:500;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.eyebrow b{color:var(--accent);font-weight:700}
+.hero h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,6vw,64px);line-height:1.15;letter-spacing:.01em;margin-top:18px}
+.hero h1 em{font-style:normal;color:var(--accent);position:relative;white-space:nowrap}
+.hero h1 em::after{content:"";position:absolute;left:0;right:0;bottom:.06em;height:.12em;background:var(--accent);opacity:.18;border-radius:2px}
+.hero .lede{max-width:40em;color:var(--ink-2);font-size:17.5px;margin-top:18px}
+
+.chain{margin-top:36px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:20px 20px 14px}
+.chain-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.chain-head h2{font-size:15px;font-weight:700}
+.chain-head .meta{font-size:12.5px;color:var(--muted)}
+.chain-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;position:relative}
+.node{position:relative;padding:14px 14px 12px;text-decoration:none;color:inherit;border-radius:10px;transition:background .2s;min-width:0}
+.node:hover{background:var(--surface-2)}
+.node .lv{font-size:11.5px;color:var(--muted);letter-spacing:.08em}
+.node .nm{font-weight:700;font-size:15px;margin-top:2px;line-height:1.35}
+.node .val{font-family:var(--f-data);font-size:22px;font-weight:600;margin-top:8px;font-variant-numeric:tabular-nums}
+.node .sub{font-size:12px;color:var(--muted);line-height:1.5}
+.node .st{margin-top:8px}
+.pipe{grid-column:1/-1;height:18px;position:relative;margin:2px 14px 6px}
+.pipe svg{width:100%;height:18px;display:block;overflow:visible}
+.pipe .flow{stroke:var(--accent);stroke-width:2;stroke-dasharray:3 9;animation:flow 1.4s linear infinite;opacity:.7}
+@keyframes flow{to{stroke-dashoffset:-24}}
+.chain-foot{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);padding:6px 14px 0;flex-wrap:wrap}
+.chain-foot .arrow{font-family:var(--f-data)}
+
+/* status pill: icon + label + color */
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:2px 9px 2px 7px;border-radius:999px;border:1px solid currentColor;line-height:1.6;white-space:nowrap}
+.pill i{width:8px;height:8px;display:inline-block;background:currentColor}
+.pill.s0{color:var(--good)} .pill.s0 i{border-radius:50%}
+.pill.s1{color:color-mix(in srgb,var(--warn) 70%,var(--ink))} .pill.s1 i{clip-path:polygon(50% 0,100% 100%,0 100%);background:var(--warn)}
+.pill.s2{color:var(--crit)} .pill.s2 i{border-radius:1px}
+.pill.na{color:var(--muted)}
+
+/* ---------- reading guide ---------- */
+.guide{padding-block:24px 8px}
+.guide-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:start}
+.guide h2,.sec-title{font-family:var(--f-display);font-weight:900;font-size:clamp(24px,3.4vw,34px);line-height:1.3}
+.guide p{color:var(--ink-2);margin-top:12px;max-width:36em}
+.ladder{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ladder li{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px}
+.ladder .lk{font-size:12px;color:var(--muted);font-family:var(--f-data)}
+.ladder .lt{font-weight:700;font-size:14.5px}
+.ladder .ld{font-size:12.5px;color:var(--muted)}
+.speed{font-size:11.5px;font-family:var(--f-data);color:var(--accent);white-space:nowrap}
+.parts{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.parts span{font-size:12.5px;padding:3px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2)}
+
+/* ---------- chapter ---------- */
+.chapter{padding-block:0 24px}
+.ch-head{margin-top:18px;display:grid;grid-template-columns:auto 1fr;gap:4px 22px;align-items:start}
+.ch-no{grid-row:span 3;font-family:var(--f-display);font-weight:900;font-size:clamp(56px,9vw,104px);line-height:.9;color:var(--accent);opacity:.9}
+.ch-layer{font-size:13px;letter-spacing:.12em;color:var(--muted);font-weight:500}
+.ch-head h2{font-family:var(--f-display);font-weight:900;font-size:clamp(26px,4vw,40px);line-height:1.25}
+.ch-head .lede{color:var(--ink-2);font-size:17px;max-width:42em;margin-top:6px}
+
+.part{display:grid;grid-template-columns:120px minmax(0,1fr);gap:20px;margin-top:40px}
+.part>.tag{font-size:12.5px;font-weight:700;color:var(--accent);letter-spacing:.06em;padding-top:4px;border-top:2px solid var(--accent);align-self:start}
+.part>.body{min-width:0}
+.prose{max-width:44em;color:var(--ink)}
+.prose p+p{margin-top:12px}
+.prose strong{font-weight:700}
+.prose .hl{background:linear-gradient(transparent 62%,var(--accent-soft) 62%)}
+.formula{font-family:var(--f-data);background:var(--surface-2);border-radius:8px;padding:12px 16px;margin:14px 0;font-size:14.5px;overflow-x:auto;white-space:nowrap}
+.formula b{color:var(--accent);font-weight:600}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px}
+.card + .card{margin-top:16px}
+.card-h{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.card-h h3{font-size:16px;font-weight:700}
+.card-h .note{font-size:12.5px;color:var(--muted)}
+.cap{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6}
+.chart{width:100%;height:440px}
+.chart.sm{height:320px}
+.chart.xs{height:260px}
+
+.seg{display:inline-flex;background:var(--surface-2);border-radius:8px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:4px 11px;border-radius:6px;font-size:13px;cursor:pointer;color:var(--ink-2)}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:var(--surface);color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+
+.read-table{width:100%;border-collapse:collapse;font-size:14.5px}
+.read-table th,.read-table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.read-table th{font-size:12.5px;color:var(--muted);font-weight:500}
+.tbl{overflow-x:auto}
+.data-table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.data-table th,.data-table td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.data-table th:first-child,.data-table td:first-child{text-align:left}
+.data-table th{font-size:12px;color:var(--muted);font-weight:500;position:sticky;top:0;background:var(--surface)}
+.data-table td{font-family:var(--f-data)}
+.data-table tr.sim td{color:var(--muted)}
+.pos{color:var(--good)} .neg{color:var(--crit)}
+
+.fail{border:1px solid color-mix(in srgb,var(--serious) 45%,var(--line));background:color-mix(in srgb,var(--serious) 6%,var(--surface));border-radius:12px;padding:16px 18px}
+.fail h4{margin:0 0 6px;font-size:15px;display:flex;gap:8px;align-items:center}
+.fail h4::before{content:"!";display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--serious);color:#fff;font-size:13px;font-family:var(--f-data)}
+.fail p{font-size:14.5px;color:var(--ink-2)}
+.fail+.fail{margin-top:12px}
+
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.link{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--surface);transition:border-color .2s,transform .2s}
+.link:hover{border-color:var(--accent);transform:translateY(-1px)}
+.link .to{font-size:12px;color:var(--accent);font-weight:700}
+.link p{font-size:14px;color:var(--ink-2);margin-top:3px;line-height:1.6}
+
+/* labs */
+.lab{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:22px}
+.controls{display:grid;gap:16px;align-content:start}
+.ctrl label{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2);gap:8px}
+.ctrl label output{font-family:var(--f-data);color:var(--ink);font-weight:600}
+input[type=range]{width:100%;accent-color:var(--accent);margin-top:6px}
+select{font:inherit;font-size:14px;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%}
+.btn{border:1px solid var(--line);background:var(--surface);padding:7px 14px;border-radius:8px;font-size:13.5px;cursor:pointer;transition:border-color .2s,background .2s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{color:#fff;filter:brightness(1.08)}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:4px}
+.kpi{background:var(--surface-2);border-radius:10px;padding:10px 12px;min-width:0}
+.kpi .k{font-size:12px;color:var(--muted)}
+.kpi .v{font-family:var(--f-data);font-size:20px;font-weight:600;line-height:1.35}
+.kpi .d{font-size:12px;color:var(--ink-2)}
+.explain{font-size:14.5px;color:var(--ink-2);margin-top:12px;padding:12px 14px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0}
+
+/* credit stack bars */
+.stackviz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:end;height:250px;padding:10px 6px 0;border-bottom:1px solid var(--axis)}
+.scol{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px}
+.lab .kpis{grid-template-columns:repeat(auto-fit,minmax(108px,1fr))}
+.sbar{width:min(120px,70%);display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
+.sbar div{border-radius:4px;display:grid;place-items:center;color:#fff;font-family:var(--f-data);font-size:12.5px;font-weight:600;transition:height .45s cubic-bezier(.2,.8,.2,1);overflow:hidden;min-height:0}
+.sbar .rf{background:var(--s1)} .sbar .sp{background:var(--s2)}
+.stot{font-family:var(--f-data);font-weight:600;font-size:15px}
+.slabels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;text-align:center;font-size:13px;color:var(--muted);margin-top:6px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* gsr gauge */
+.gauge{position:relative;height:46px;margin-top:22px}
+.gauge .track{position:absolute;left:0;right:0;top:18px;height:10px;border-radius:5px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--s3) 70%,transparent),color-mix(in srgb,var(--axis) 80%,transparent) 50%,color-mix(in srgb,var(--metal) 80%,transparent))}
+.gauge .mk{position:absolute;top:8px;width:2px;height:30px;background:var(--ink);transform:translateX(-1px);transition:left .4s cubic-bezier(.2,.8,.2,1)}
+.gauge .mk.old{background:var(--muted)}
+.gauge .mk span{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-family:var(--f-data);font-size:12px;white-space:nowrap}
+.gauge .ends{position:absolute;top:32px;left:0;right:0;display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted)}
+
+/* vix insurance */
+.policy{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pcard{border:1px dashed var(--axis);border-radius:12px;padding:12px 14px;background:var(--surface);position:relative;overflow:hidden}
+.pcard .pt{font-size:12px;color:var(--muted);letter-spacing:.06em}
+.pcard .pp{font-family:var(--f-data);font-size:28px;font-weight:600;line-height:1.3}
+.pcard .pd{font-size:12.5px;color:var(--ink-2)}
+.pcard.hot{border-style:solid;border-color:var(--crit)}
+.pcard.hot::after{content:"較貴";position:absolute;top:10px;right:-28px;transform:rotate(35deg);background:var(--crit);color:#fff;font-size:11px;padding:1px 32px}
+.presets{display:flex;gap:6px;flex-wrap:wrap}
+.presets button{font-size:12.5px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);cursor:pointer}
+.presets button:hover{border-color:var(--accent);color:var(--accent)}
+
+/* quiz */
+.quiz{margin-top:40px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.quiz .qh{font-size:12.5px;color:var(--accent);font-weight:700;letter-spacing:.08em}
+.quiz .qq{font-weight:700;margin-top:4px;font-size:16px}
+.quiz .opts{display:grid;gap:8px;margin-top:12px}
+.quiz .opts button{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 14px;cursor:pointer;font-size:14.5px;display:flex;gap:10px;transition:border-color .2s,background .2s}
+.quiz .opts button:hover:not([disabled]){border-color:var(--accent)}
+.quiz .opts button .ol{font-family:var(--f-data);color:var(--muted)}
+.quiz .opts button.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 8%,var(--surface))}
+.quiz .opts button.wrong{border-color:var(--crit);background:color-mix(in srgb,var(--crit) 7%,var(--surface))}
+.quiz .opts button[disabled]{cursor:default}
+.quiz .fb{margin-top:10px;font-size:14.5px;color:var(--ink-2)}
+
+/* replay */
+.replay-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.firsts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:14px}
+.first{background:var(--surface-2);border-radius:10px;padding:10px 12px;min-width:0}
+.first .fo{font-family:var(--f-data);font-size:11.5px;color:var(--accent);font-weight:600}
+.first .fn{font-size:13px;font-weight:700;margin-top:1px}
+.first .fd{font-family:var(--f-data);font-size:13.5px;margin-top:2px}
+.first .fx{font-size:11.5px;color:var(--muted)}
+
+/* dashboard */
+.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:20px}
+.dcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0;position:relative;overflow:hidden}
+.dcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--stc,var(--line))}
+.dcard .dl{font-size:12px;color:var(--muted)}
+.dcard .dn{font-weight:700;font-size:14.5px}
+.dcard .dv{font-family:var(--f-data);font-size:26px;font-weight:600;line-height:1.2}
+.dcard .dr{font-size:12.5px;color:var(--ink-2);line-height:1.55}
+.dcard svg{width:100%;height:44px;display:block;margin-top:auto}
+.dcard .pill{align-self:flex-start}
+.verdict{margin-top:18px;font-size:16px;padding:16px 18px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.verdict b{font-family:var(--f-data)}
+
+/* glossary */
+.gloss{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:20px}
+.gl{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.gl dt{font-weight:700}
+.gl dd{margin:4px 0 0;font-size:14px;color:var(--ink-2);line-height:1.65}
+.term{border:0;background:none;padding:0;color:inherit;border-bottom:1px dashed var(--accent);cursor:help;font:inherit}
+.pop{position:absolute;z-index:70;max-width:300px;background:var(--ink);color:var(--bg);font-size:13.5px;line-height:1.6;padding:10px 12px;border-radius:8px;box-shadow:var(--shadow);pointer-events:none;opacity:0;transition:opacity .15s}
+.pop.show{opacity:1}
+.pop b{display:block;margin-bottom:2px}
+
+footer{margin-top:80px;border-top:1px solid var(--line);padding-block:28px 48px;font-size:13px;color:var(--muted)}
+footer .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+footer h4{margin:0 0 6px;color:var(--ink-2);font-size:13px}
+footer code{font-family:var(--f-data);background:var(--surface-2);padding:1px 6px;border-radius:4px;color:var(--ink)}
+.disclaimer{margin-top:20px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;color:var(--ink-2)}
+
+.reveal{animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{transform:translateY(10px);opacity:.001}to{transform:none;opacity:1}}
+
+@media (max-width:1240px){
+  .ch-layout{grid-template-columns:minmax(0,1fr)}
+  .ch-toc{display:none}
+}
+@media (max-width:1000px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;inset:0 auto 0 0;width:min(300px,86vw);z-index:80;transform:translateX(-102%);transition:transform .3s cubic-bezier(.2,.8,.2,1);
+    padding-top:calc(22px + env(safe-area-inset-top,0px));box-shadow:var(--shadow)}
+  .app.nav-open .side{transform:none}
+  .app.nav-open .scrim{display:block;position:fixed;inset:0;z-index:70;background:rgba(10,14,22,.4)}
+  .nav-item.on::before{display:none}
+  .mbar{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:60;align-items:center;gap:12px;height:54px;background:color-mix(in srgb,var(--surface) 90%,transparent);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+    padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .mbar .brand{font-size:17px;padding:0}
+  .mbar .where{font-size:13px;color:var(--ink-2);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .menu-btn{width:38px;height:38px;border:1px solid var(--line);background:var(--surface);border-radius:8px;display:grid;place-items:center;cursor:pointer;flex:none}
+  .menu-btn span{display:block;width:16px;height:2px;background:var(--ink);border-radius:1px;box-shadow:0 -5px 0 var(--ink),0 5px 0 var(--ink)}
+  .pagebar{top:calc(54px + env(safe-area-inset-top,0px))}
+  .crumb{padding-top:22px}
+}
+@media (max-width:900px){
+  .guide-grid,.lab{grid-template-columns:minmax(0,1fr)}
+  .path{grid-template-columns:minmax(0,1fr)}
+  .part{grid-template-columns:minmax(0,1fr);gap:10px}
+  .part>.tag{border-top:0;padding-top:0;border-left:2px solid var(--accent);padding-left:8px}
+  .chain-row{grid-template-columns:minmax(0,1fr)}
+  .pipe{display:none}
+  .node{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 12px;border-bottom:1px solid var(--line);border-radius:0;padding:12px 4px}
+  .node:last-of-type{border-bottom:0}
+  .node .val{grid-column:2;grid-row:1/span 2;margin:0;align-self:center;font-size:19px}
+  .node .st{grid-column:2;margin:0;justify-self:end}
+  .node .sub{grid-column:1}
+  .firsts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .chart{height:380px}
+}
+@media (max-width:560px){
+  .ch-head{grid-template-columns:minmax(0,1fr)}
+  .ch-no{grid-row:auto;font-size:56px}
+  .chart{height:360px} .chart.sm{height:300px}
+  .ladder li{grid-template-columns:minmax(0,1fr) auto}
+  .ladder .lk{display:none}
+  .brand{font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<div class="app" id="app">
+<aside class="side" id="side" aria-label="課程目錄">
+  <a class="brand" href="#home">風險<span>傳導</span>鏈</a>
+  <div class="brand-sub">總經指標課程 · 5 章 + 2 個實作</div>
+  <div class="course-prog"><div style="display:flex;justify-content:space-between"><span>學習進度</span><span class="mono" id="progTxt">0 / 5</span></div><div class="bar"><i id="progBar"></i></div></div>
+  <nav id="sideNav"></nav>
+  <div class="side-foot" id="sideFoot"></div>
+</aside>
+<div class="scrim" id="scrim"></div>
+<div style="min-width:0">
+<header class="mbar"><button class="menu-btn" id="menuBtn" aria-label="開啟課程目錄"><span></span></button><a class="brand" href="#home">風險<span>傳導</span>鏈</a><span class="where" id="where"></span></header>
+<div class="pagebar"><i id="pagebar"></i></div>
+<main id="top">
+<!-- ================= HOME ================= -->
+<div class="view" data-route="home" data-title="課程首頁">
+<section class="hero wrap">
+  <div class="eyebrow reveal"><b>總經教材</b><span>5 個指標</span><span>·</span><span>2000 年至今真實數據</span><span>·</span><span id="updatedTop">資料更新中</span></div>
+  <h1 class="reveal">市場轉弱,<br>通常有<em>先後順序</em>。</h1>
+  <p class="lede reveal">股市不會毫無徵兆地崩跌。壓力通常先出現在美元與利率,接著傳到債市,再傳到商品和股市內部,最後才變成恐慌。這份教材用五個指標,把這條傳導鏈一節一節拆開,並用真實數據檢驗每個說法。</p>
+  <a class="cta reveal" href="#ch1" id="ctaStart">從第 1 章開始 <span class="ar">→</span></a>
+
+  <div class="chain reveal" aria-label="五個指標目前狀態">
+    <div class="chain-head">
+      <h2>傳導鏈目前狀態</h2>
+      <span class="meta" id="chainMeta">依教材示範規則判讀</span>
+    </div>
+    <div class="chain-row" id="chainRow"></div>
+    <div class="chain-foot"><span class="arrow">← 領先、緩慢</span><span>點任一節進入章節</span><span class="arrow">同步、劇烈 →</span></div>
+  </div>
+</section>
+
+<!-- ================= GUIDE ================= -->
+<section class="guide wrap">
+  <div class="guide-grid">
+    <div>
+      <h2>為什麼要排成一條鏈?</h2>
+      <p>單看一個指標很容易誤判:美元走強可能只是歐洲經濟較差,VIX 升高可能只是一天的新聞。但如果<strong>資金面、信用面、風險偏好、股市內部、恐慌</strong>依序亮燈,代表壓力正在一層一層往下傳,可信度就高得多。</p>
+      <p>越上層的指標越早反應,但雜訊也越多;越下層越準確,但出現時通常已經在跌了。學會這條鏈,就是學會<strong>判斷現在走到第幾層</strong>。</p>
+      <div class="parts"><span>每章結構</span><span>是什麼</span><span>怎麼算</span><span>為什麼有效</span><span>怎麼解讀</span><span>什麼時候失靈</span><span>和其他指標的關係</span></div>
+    </div>
+    <ol class="ladder">
+      <li><span class="lk">第 1 層</span><div><div class="lt">資金面:美元與實質利率</div><div class="ld">錢變貴、變少</div></div><span class="speed">最領先</span></li>
+      <li><span class="lk">第 2 層</span><div><div class="lt">信用面:信用利差</div><div class="ld">債市開始擔心違約</div></div><span class="speed">領先</span></li>
+      <li><span class="lk">第 3 層</span><div><div class="lt">風險偏好:金銀比</div><div class="ld">資金從投機轉向避險</div></div><span class="speed">領先~同步</span></li>
+      <li><span class="lk">第 4 層</span><div><div class="lt">股市內部:槓桿 ETF</div><div class="ld">上漲動能先衰退</div></div><span class="speed">略領先</span></li>
+      <li><span class="lk">第 5 層</span><div><div class="lt">恐慌:VIX 期限結構</div><div class="ld">搶買短期保險</div></div><span class="speed">同步</span></li>
+    </ol>
+  </div>
+</section>
+<section class="wrap" style="padding-block:48px 64px">
+  <h2 class="sec-title">學習路線</h2>
+  <p class="cap">建議依序閱讀。每章約 10–15 分鐘,章末的小測驗答完就算完成。</p>
+  <div class="path" id="path"></div>
+</section>
+</div>
+
+<!-- ================= CH1 ================= -->
+<div class="view wrap" data-route="ch1" hidden><div class="ch-layout"><section class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-no">01</div>
+    <div class="ch-layer">第 1 層 · 資金面</div>
+    <h2>美元指數 DXY 與實質利率</h2>
+    <p class="lede">美元是全世界借錢用的貨幣。美元變強、利率變高,等於全球的錢變貴又變少,所有以美元計價的資產都會感受到壓力。</p>
+  </div>
+
+  <div class="part"><div class="tag">是什麼</div><div class="body prose">
+    <p><strong>DXY</strong> 衡量美元對六種主要貨幣的強弱,1973 年 3 月定為 100。數字越大代表美元越強。</p>
+    <p><strong>實質利率</strong>是扣掉通膨後真正拿到的利息,市場上直接用 10 年期抗通膨公債(TIPS)殖利率來觀察。</p>
+  </div></div>
+
+  <div class="part"><div class="tag">怎麼算</div><div class="body">
+    <div class="prose"><p>DXY 是六種貨幣的加權幾何平均。<span class="hl">歐元就占了 57.6%</span>,所以 DXY 很大程度是「歐元兌美元」的反向指標。</p></div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-h"><h3>DXY 的組成權重</h3><span class="note">ICE 美元指數,固定權重</span></div>
+      <div class="chart xs" id="cDxyW"></div>
+    </div>
+    <div class="formula">實質利率 ≈ 名目利率 − 預期通膨 &nbsp;&nbsp;例:<b>4.5%</b> − 2.5% = <b>2.0%</b></div>
+  </div></div>
+
+  <div class="part"><div class="tag">為什麼有效</div><div class="body prose">
+    <p><strong>對商品:</strong>黃金、原油用美元報價。美元升值時,歐洲或亞洲買家要花更多本國貨幣才買得到,需求下降,價格承壓。</p>
+    <p><strong>對美股:</strong>標普 500 企業約四成營收來自海外,美元升值會讓海外營收換回美元時縮水。更重要的是,各國企業與政府有大量美元債務,美元越強,還債越吃力,全球資金跟著變緊。</p>
+    <p><strong>對黃金:</strong>黃金不配息。實質利率 2% 時,持有黃金等於每年放棄 2% 的無風險收益,這就是<button class="term" data-term="opp">持有成本</button>。升息環境下這個成本變高,黃金就比較沒吸引力。</p>
+  </div></div>
+
+  <div class="part"><div class="tag">怎麼解讀</div><div class="body">
+    <div class="card">
+      <div class="card-h"><h3>美元、實質利率與黃金</h3>
+        <div class="seg" data-range="cFund"><button data-y="3">3 年</button><button data-y="10">10 年</button><button data-y="0" class="on">全部</button></div></div>
+      <div class="chart" id="cFund"></div>
+      <p class="cap">灰色帶狀區為標普 500 的重大回檔期間。三張圖共用時間軸,滑鼠移動可對照同一天的數值;拖曳下方滑桿可縮放。資料:Yahoo Finance(DXY、黃金期貨)、FRED DFII10。</p>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>實驗:持有黃金的機會成本</h3><span class="note">以 100 萬美元持有 1 年計</span></div>
+      <div class="lab">
+        <div class="controls">
+          <div class="ctrl"><label for="iNom">名目利率(公債殖利率)<output id="oNom"></output></label><input type="range" id="iNom" min="0" max="8" step="0.25" value="4.5"></div>
+          <div class="ctrl"><label for="iInf">預期通膨<output id="oInf"></output></label><input type="range" id="iInf" min="0" max="8" step="0.25" value="2.5"></div>
+          <div class="kpis">
+            <div class="kpi"><div class="k">實質利率</div><div class="v" id="kReal"></div></div>
+            <div class="kpi"><div class="k">放棄的實質收益</div><div class="v" id="kOpp"></div></div>
+          </div>
+          <div class="explain" id="oppText"></div>
+        </div>
+        <div style="min-width:0">
+          <div class="chart sm" id="cScatter"></div>
+          <p class="cap">每一點是一週。藍色為 2006–2021 年:實質利率越高、金價越低,關係很穩定。橘色為 2022 年之後:實質利率大升,金價卻一路創新高,這就是下面「失靈」要講的事。</p>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="part"><div class="tag">什麼時候失靈</div><div class="body">
+    <div class="card">
+      <div class="card-h"><h3>案例:2020 年 3 月的「搶現金」</h3>
+        <div class="seg" id="dashSeg"><button data-p="0" class="on">1 風險資產先跌</button><button data-p="1">2 黃金也被賣</button><button data-p="2">3 Fed 出手後</button></div></div>
+      <div class="chart sm" id="cDash"></div>
+      <div class="explain" id="dashText"></div>
+      <p class="cap">三條線都以 2020-02-19(股市高點)= 100 重新計算,方便比較漲跌幅。</p>
+    </div>
+    <div class="fail" style="margin-top:16px"><h4>黃金的避險效果會「短暫」失效</h4><p>股市暴跌時,機構被<button class="term" data-term="margin">追繳保證金</button>,必須賣掉手上能快速變現的資產換成美元,流動性好的黃金也會被一起賣掉。所以在恐慌最初的一兩週,黃金可能和股市同跌,美元反而大漲。等央行出手提供美元,黃金通常會領先反彈。</p></div>
+    <div class="fail"><h4>2022 年後,黃金不再只看實質利率</h4><p>俄烏戰爭後,各國央行為了降低對美元資產的依賴大量買進黃金,連續三年每年超過 1,000 公噸。這股買盤不在乎利率,讓「實質利率上升、黃金下跌」的規律失靈。看黃金時,現在還要考慮央行購金。</p></div>
+    <div class="fail"><h4>DXY 不等於全部的美元</h4><p>DXY 沒有人民幣、墨西哥披索等主要貿易對手的貨幣。如果要看美元對全世界的強弱,可以參考 Fed 的廣義美元指數。</p></div>
+  </div></div>
+
+  <div class="part"><div class="tag">和其他指標</div><div class="body links">
+    <a class="link" href="#ch2"><span class="to">→ 02 信用利差</span><p>錢變貴之後,體質差的公司最先撐不住,債市開始要求更高的補償。</p></a>
+    <a class="link" href="#ch3"><span class="to">→ 03 金銀比</span><p>美元與實質利率同時影響金價和銀價,但白銀受工業景氣影響更大。</p></a>
+  </div></div>
+
+  <div class="quiz" data-q="0"></div>
+</section><nav class="ch-toc" aria-label="本章目錄"></nav></div><div class="pager"></div></div>
+
+<!-- ================= CH2 ================= -->
+<div class="view wrap" data-route="ch2" hidden><div class="ch-layout"><section class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-no">02</div>
+    <div class="ch-layer">第 2 層 · 信用面</div>
+    <h2>信用利差</h2>
+    <p class="lede">債券投資人只在乎一件事:錢拿不拿得回來。當他們開始擔心企業還不出錢,就會要求更高的利息,這個「額外利息」就是信用利差。</p>
+  </div>
+
+  <div class="part"><div class="tag">是什麼</div><div class="body prose">
+    <p>信用利差是<strong>公司債殖利率減去同天期公債殖利率</strong>。美國公債被視為不會違約,公司債多出來的利息,就是投資人承擔違約風險要求的補償。</p>
+    <p>注意「利差」在總經裡有兩種:這裡講的是<strong>信用利差</strong>(公司債 − 公債)。另一種是<strong>期限利差</strong>(10 年期公債 − 2 年期公債,也就是常聽到的殖利率曲線倒掛),兩者意義不同。</p>
+  </div></div>
+
+  <div class="part"><div class="tag">怎麼算</div><div class="body">
+    <div class="formula">信用利差 = 公司債殖利率 − 公債殖利率 &nbsp;&nbsp;例:<b>6.0%</b> − 4.0% = <b>2.0%</b>(200 <button class="term" data-term="bp">基點</button>)</div>
+    <div class="prose"><p>本教材用兩個數據:<strong>Baa 公司債利差</strong>(Moody's Baa 等級減 10 年期公債,有 2000 年以來的長歷史)與<strong>高收益債利差</strong>(俗稱垃圾債,對風險更敏感,但 FRED 只提供近三年)。</p></div>
+  </div></div>
+
+  <div class="part"><div class="tag">為什麼有效</div><div class="body">
+    <div class="prose">
+      <p>常見的誤解是「升息 → 公司債也要升息 → 利差擴大」。其實如果公債和公司債<strong>一起漲 1%</strong>,利差根本不會變。利差擴大只有一個原因:<span class="hl">投資人覺得違約風險變高了</span>。升息只是間接推手:利息變重,體質差的公司償債能力下降,違約機率才上升。</p>
+      <p>企業借錢的成本是<strong>兩層疊加</strong>:公債利率(整體環境)加上信用利差(自己的風險)。升息加上利差擴大,等於兩層同時變貴。用下面的實驗試試看。</p>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="card-h"><h3>實驗:一家公司的借錢成本</h3><span class="note">負債 500 億、營業利益 60 億、稅率 20%、股數 10 億股</span></div>
+      <div class="lab">
+        <div class="controls">
+          <div class="btns" id="crPresets">
+            <button class="btn" data-rf="1" data-sp="0">只升息 1%</button>
+            <button class="btn" data-rf="0" data-sp="2">違約疑慮升高</button>
+            <button class="btn" data-rf="1" data-sp="2">兩者同時</button>
+            <button class="btn" data-rf="0" data-sp="0">重設</button>
+          </div>
+          <div class="ctrl"><label for="iRf">公債殖利率變化<output id="oRf"></output></label><input type="range" id="iRf" min="-2" max="3" step="0.25" value="0"></div>
+          <div class="ctrl"><label for="iSp">信用利差變化<output id="oSp"></output></label><input type="range" id="iSp" min="-1" max="5" step="0.25" value="0"></div>
+          <div class="kpis">
+            <div class="kpi"><div class="k">每年利息</div><div class="v" id="kInt"></div><div class="d" id="kIntD"></div></div>
+            <div class="kpi"><div class="k">每股盈餘 EPS</div><div class="v" id="kEps"></div><div class="d" id="kEpsD"></div></div>
+            <div class="kpi"><div class="k">利息保障倍數</div><div class="v" id="kCov"></div><div class="d" id="kCovD"></div></div>
+          </div>
+        </div>
+        <div style="min-width:0">
+          <div class="stackviz" id="stackViz">
+            <div class="scol"><div class="stot" id="tot0"></div><div class="sbar"><div class="sp" id="b0s"></div><div class="rf" id="b0r"></div></div></div>
+            <div class="scol"><div class="stot" id="tot1"></div><div class="sbar"><div class="sp" id="b1s"></div><div class="rf" id="b1r"></div></div></div>
+          </div>
+          <div class="slabels"><span>原本</span><span>之後</span></div>
+          <div class="legend"><span><i style="background:var(--s1)"></i>公債殖利率(無風險利率)</span><span><i style="background:var(--s2)"></i>信用利差(違約風險補償)</span></div>
+          <div class="explain" id="crText"></div>
+          <p class="cap">簡化假設:全部債務立刻以新利率計息。實際上企業要等舊債到期、重新借錢時才會反映,所以影響是逐步出現的。</p>
+        </div>
+      </div>
+    </div>
+    <div class="prose" style="margin-top:16px">
+      <p><strong>對股市的三個傳導:</strong>①利息變多,獲利被吃掉;舊債到期時借不到錢或借得很貴,只好砍投資、停止庫藏股、裁員。②評價下修:折現率提高,同樣的獲利只值更低的本益比。③<span class="hl">債市通常比股市早察覺</span>:債券投資人最多只能拿回本金加利息,上檔有限,所以對下檔風險特別敏感。</p>
+    </div>
+  </div></div>
+
+  <div class="part"><div class="tag">怎麼解讀</div><div class="body">
+    <div class="card">
+      <div class="card-h"><h3>Baa 公司債利差與標普 500</h3>
+        <div class="seg" data-range="cCredit"><button data-y="3">3 年</button><button data-y="10">10 年</button><button data-y="0" class="on">全部</button></div></div>
+      <div class="chart" id="cCredit"></div>
+      <p class="cap">留意 2007 年:利差從年中開始擴大,標普 500 到 10 月才創下高點。資料:FRED BAA10Y、Yahoo ^GSPC。</p>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>高收益債利差(近三年)</h3><span class="note" id="hyNote"></span></div>
+      <div class="chart xs" id="cHy"></div>
+      <p class="cap">資料:FRED BAMLH0A0HYM2(ICE BofA 美國高收益債 OAS)。授權限制,FRED 只提供最近三年。</p>
+    </div>
+    <div class="tbl" style="margin-top:16px"><table class="read-table">
+      <thead><tr><th>Baa 利差</th><th>高收益債利差</th><th>市場狀態</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1.5% 以下</td><td class="mono">3.5% 以下</td><td>非常樂觀,投資人幾乎不在乎風險。偏低的利差本身也是過熱的訊號。</td></tr>
+        <tr><td class="mono">1.5–2.5%</td><td class="mono">3.5–5%</td><td>正常區間。</td></tr>
+        <tr><td class="mono">2.5–3.5%</td><td class="mono">5–7%</td><td>壓力升高,通常伴隨股市回檔。</td></tr>
+        <tr><td class="mono">3.5% 以上</td><td class="mono">7% 以上</td><td>信用危機或衰退(2008 年 Baa 曾超過 6%,高收益債超過 19%)。</td></tr>
+      </tbody></table></div>
+    <p class="cap">比起絕對水準,<strong>擴大的速度</strong>更重要。幾週內快速擴大,比長期停在高位更值得警覺。</p>
+  </div></div>
+
+  <div class="part"><div class="tag">什麼時候失靈</div><div class="body">
+    <div class="fail"><h4>央行介入會壓低利差</h4><p>2020 年 3 月 Fed 宣布直接買公司債,利差在經濟還很差時就快速收斂。只要央行出手,利差就不完全反映違約風險。</p></div>
+    <div class="fail"><h4>利差偏低不代表安全</h4><p>2006 年和 2021 年利差都處於歷史低檔,事後看反而是風險累積最多的時候。利差低只代表「現在大家不擔心」。</p></div>
+  </div></div>
+
+  <div class="part"><div class="tag">和其他指標</div><div class="body links">
+    <a class="link" href="#ch1"><span class="to">← 01 資金面</span><p>升息與強勢美元提高借錢成本,是利差擴大的上游原因。</p></a>
+    <a class="link" href="#ch4"><span class="to">→ 04 槓桿金絲雀</span><p>企業獲利預期下修,股市上漲動能減弱,槓桿 ETF 最先跌破長期均線。</p></a>
+  </div></div>
+
+  <div class="quiz" data-q="1"></div>
+</section><nav class="ch-toc" aria-label="本章目錄"></nav></div><div class="pager"></div></div>
+
+<!-- ================= CH3 ================= -->
+<div class="view wrap" data-route="ch3" hidden><div class="ch-layout"><section class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-no">03</div>
+    <div class="ch-layer">第 3 層 · 風險偏好</div>
+    <h2>金銀比</h2>
+    <p class="lede">黃金和白銀都是貴金屬,但個性完全不同。黃金是避險資產,白銀有一半以上用在工業。兩者誰比較強,透露了資金正在避險還是在冒險。</p>
+  </div>
+
+  <div class="part"><div class="tag">是什麼</div><div class="body prose">
+    <p>金銀比是<strong>1 盎司黃金可以換幾盎司白銀</strong>。比值上升代表黃金相對強勢;比值下降代表白銀相對強勢。</p>
+  </div></div>
+
+  <div class="part"><div class="tag">怎麼算</div><div class="body">
+    <div class="formula">金銀比 = 金價 ÷ 銀價 &nbsp;&nbsp;最新:<b id="gsrNow"></b></div>
+    <div class="card">
+      <div class="card-h"><h3>實驗:金價和銀價各漲多少,比值會怎麼動?</h3><span class="note">以最新價格為起點</span></div>
+      <div class="lab">
+        <div class="controls">
+          <div class="ctrl"><label for="iG">黃金漲跌<output id="oG"></output></label><input type="range" id="iG" min="-40" max="60" step="1" value="10"></div>
+          <div class="ctrl"><label for="iS">白銀漲跌<output id="oS"></output></label><input type="range" id="iS" min="-50" max="100" step="1" value="25"></div>
+          <div class="btns" id="gsPresets">
+            <button class="btn" data-g="10" data-s="25">景氣擴張</button>
+            <button class="btn" data-g="8" data-s="-12">避險升溫</button>
+            <button class="btn" data-g="-5" data-s="-20">衰退恐慌</button>
+          </div>
+        </div>
+        <div style="min-width:0">
+          <div class="kpis">
+            <div class="kpi"><div class="k">新的金銀比</div><div class="v" id="kGsr"></div><div class="d" id="kGsrD"></div></div>
+            <div class="kpi"><div class="k">2000 年以來百分位</div><div class="v" id="kPct"></div><div class="d">越高代表越偏避險</div></div>
+          </div>
+          <div class="gauge" id="gauge"><div class="track"></div><div class="mk old" id="mkOld"><span></span></div><div class="mk" id="mkNew"><span></span></div><div class="ends"><span>白銀強(偏投機)</span><span>黃金強(偏避險)</span></div></div>
+          <div class="explain" id="gsText" style="margin-top:22px"></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="part"><div class="tag">為什麼有效</div><div class="body prose">
+    <p><strong>黃金</strong>的需求來自央行、珠寶和投資,工業用途不到一成,主要功能是保值與避險。</p>
+    <p><strong>白銀</strong>超過一半用在工業:太陽能板、電子產品、電動車。市場規模比黃金小很多,價格波動通常是黃金的 1.5 到 2 倍,投機資金很多。</p>
+    <p>所以當市場資金寬鬆、景氣擴張時,白銀同時受惠於「熱錢」和「工業需求」,漲得比黃金多,比值下降。當市場開始避險、景氣轉弱時,資金退回黃金,白銀的工業需求也下滑,比值上升。</p>
+  </div></div>
+
+  <div class="part"><div class="tag">怎麼解讀</div><div class="body">
+    <div class="card">
+      <div class="card-h"><h3>金銀比與標普 500</h3>
+        <div class="seg" data-range="cGsr"><button data-y="3">3 年</button><button data-y="10">10 年</button><button data-y="0" class="on">全部</button></div></div>
+      <div class="chart" id="cGsr"></div>
+      <p class="cap">虛線為 200 日均線。比值站上均線且持續走高,代表資金正在轉向避險。資料:Yahoo Finance 黃金、白銀期貨(GC=F、SI=F)。</p>
+    </div>
+    <div class="tbl" style="margin-top:16px"><table class="read-table">
+      <thead><tr><th>金銀比</th><th>常見情境</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">50 以下</td><td>熱錢充沛、景氣過熱,白銀大漲(2011 年 4 月曾跌到 32 左右)。</td></tr>
+        <tr><td class="mono">50–80</td><td>2000 年以來最常見的區間。</td></tr>
+        <tr><td class="mono">80–100</td><td>避險情緒偏高,或工業需求疲弱。</td></tr>
+        <tr><td class="mono">100 以上</td><td>極端恐慌(2020 年 3 月一度超過 120)。</td></tr>
+      </tbody></table></div>
+  </div></div>
+
+  <div class="part"><div class="tag">什麼時候失靈</div><div class="body">
+    <div class="fail"><h4>央行購金把比值墊高</h4><p>2022 年後央行大量買黃金,但央行不買白銀。這讓金銀比長期偏高,未必代表市場在恐慌。解讀時要看「方向和速度」,不要只看絕對水準。</p></div>
+    <div class="fail"><h4>白銀自己的供需事件</h4><p>白銀市場小,容易出現軋空或供給短缺(例如 2021 年散戶集體買白銀、2025 年倫敦白銀現貨緊缺),這時比值變化和景氣無關。</p></div>
+  </div></div>
+
+  <div class="part"><div class="tag">和其他指標</div><div class="body links">
+    <a class="link" href="#ch1"><span class="to">← 01 資金面</span><p>美元與實質利率同時壓抑金銀,但白銀還多了工業景氣這層。</p></a>
+    <a class="link" href="#ch5"><span class="to">→ 05 VIX 結構</span><p>金銀比衝高通常伴隨 VIX 飆升,兩者都是避險需求的展現。</p></a>
+  </div></div>
+
+  <div class="quiz" data-q="2"></div>
+</section><nav class="ch-toc" aria-label="本章目錄"></nav></div><div class="pager"></div></div>
+
+<!-- ================= CH4 ================= -->
+<div class="view wrap" data-route="ch4" hidden><div class="ch-layout"><section class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-no">04</div>
+    <div class="ch-layer">第 4 層 · 股市內部</div>
+    <h2>槓桿 ETF:礦坑裡的金絲雀</h2>
+    <p class="lede">以前礦工帶金絲雀下礦坑,金絲雀對毒氣比人敏感,一旦倒下就要撤離。3 倍槓桿 ETF 對「上漲動能減弱」和「波動變大」特別敏感,常比指數本身更早跌破長期均線。</p>
+  </div>
+
+  <div class="part"><div class="tag">是什麼</div><div class="body prose">
+    <p>槓桿 ETF 追蹤指數<strong>每日</strong>報酬的倍數。例如 TQQQ 追蹤那斯達克 100 指數(QQQ)每日報酬的 3 倍:QQQ 今天漲 1%,TQQQ 漲約 3%。</p>
+    <p>重點在「每日」:它每天收盤都會<button class="term" data-term="rebal">重新平衡</button>,所以長期報酬<strong>不等於</strong>指數報酬的 3 倍。</p>
+  </div></div>
+
+  <div class="part"><div class="tag">怎麼算</div><div class="body">
+    <div class="formula">每日衰減 ≈ <b>(L² − L) ÷ 2 × σ²</b> &nbsp;&nbsp;L = 槓桿倍數,σ = 指數每日波動</div>
+    <div class="prose"><p>3 倍槓桿的係數是 (9 − 3) ÷ 2 = 3。也就是說,<span class="hl">波動加倍,衰減變成 4 倍</span>。下面的模擬器可以自己調調看。</p></div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-h"><h3>實驗:波動衰減模擬器</h3><span class="note">隨機產生的模擬路徑,非真實價格</span></div>
+      <div class="lab">
+        <div class="controls">
+          <div class="ctrl"><label for="iMode">路徑類型</label><select id="iMode"><option value="rand">隨機漫步</option><option value="alt">每天一漲一跌(純震盪)</option></select></div>
+          <div class="ctrl"><label for="iLev">槓桿倍數<output id="oLev"></output></label><input type="range" id="iLev" min="2" max="3" step="1" value="3"></div>
+          <div class="ctrl"><label for="iVol">指數每日波動 σ<output id="oVol"></output></label><input type="range" id="iVol" min="0.4" max="4" step="0.1" value="1.5"></div>
+          <div class="ctrl"><label for="iDrift">指數年化趨勢<output id="oDrift"></output></label><input type="range" id="iDrift" min="-30" max="40" step="1" value="0"></div>
+          <button class="btn primary" id="reroll">換一條隨機路徑</button>
+        </div>
+        <div style="min-width:0">
+          <div class="chart sm" id="cDecay"></div>
+          <div class="kpis">
+            <div class="kpi"><div class="k">指數(1 倍)</div><div class="v" id="kIdx"></div></div>
+            <div class="kpi"><div class="k">指數報酬 × L(直覺)</div><div class="v" id="kNaive"></div></div>
+            <div class="kpi"><div class="k">槓桿 ETF(實際)</div><div class="v" id="kLev"></div></div>
+          </div>
+          <div class="explain" id="decayText"></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="part"><div class="tag">為什麼有效</div><div class="body prose">
+    <p>當市場上漲力道減弱、甚至變成盤整震盪,1 倍指數只是「漲不太動」,但槓桿 ETF 會因為波動衰減<strong>開始往下滑</strong>。所以它比指數更早跌破 <button class="term" data-term="ma200">200 日均線</button>。</p>
+    <p>換句話說,槓桿 ETF 同時對兩件事敏感:<strong>動能變弱</strong>和<strong>波動變大</strong>。這兩件事一起出現,正是行情轉弱的典型特徵。</p>
+  </div></div>
+
+  <div class="part"><div class="tag">怎麼解讀</div><div class="body">
+    <div class="card">
+      <div class="card-h"><h3>QQQ 與 TQQQ 對 200 日均線</h3>
+        <div class="seg" data-range="cCanary"><button data-y="3">3 年</button><button data-y="10">10 年</button><button data-y="0" class="on">全部</button></div></div>
+      <div class="chart" id="cCanary"></div>
+      <p class="cap">對數刻度。紅色區域為收盤價低於自身 200 日均線的期間,可以看到 TQQQ 的紅色區域更早出現、範圍更大。資料:Yahoo Finance(還原權息價格)。</p>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>真實數據檢驗:TQQQ 早幾天示警?</h3><span class="note" id="leadNote"></span></div>
+      <div class="kpis" id="leadKpis"></div>
+      <div class="tbl" style="max-height:340px;overflow:auto;margin-top:12px"><table class="data-table" id="leadTable"></table></div>
+      <p class="cap">規則:QQQ 在站上 200 日均線至少 30 個交易日後首次跌破,記為一次「指數跌破」。往前找 TQQQ 最近一次跌破自身 200 日均線(跌破前至少站上 20 天)的日期,差距就是領先天數。2010 年 TQQQ 上市前用 QQQ 每日報酬 × 3 模擬,以灰字標示。</p>
+    </div>
+  </div></div>
+
+  <div class="part"><div class="tag">什麼時候失靈</div><div class="body">
+    <div class="fail"><h4>太敏感,假訊號多</h4><p>上表的「假警報」就是 TQQQ 跌破、但 QQQ 之後 60 天都沒跌破的次數。金絲雀常常只是打個噴嚏。實務上會等它連續幾天站不回均線,或搭配信用利差、VIX 結構一起確認。</p></div>
+    <div class="fail"><h4>V 型反轉時會慢半拍</h4><p>像 2020 年 3 月這種急跌急漲,TQQQ 跌得太深,200 日均線要很久才追得上,站回均線的訊號會明顯落後指數。</p></div>
+  </div></div>
+
+  <div class="part"><div class="tag">和其他指標</div><div class="body links">
+    <a class="link" href="#ch2"><span class="to">← 02 信用利差</span><p>利差擴大削弱獲利預期,股市上漲動能跟著減弱。</p></a>
+    <a class="link" href="#ch5"><span class="to">→ 05 VIX 結構</span><p>波動變大會加速槓桿衰減;VIX 結構翻轉時,金絲雀通常早已倒下。</p></a>
+  </div></div>
+
+  <div class="quiz" data-q="3"></div>
+</section><nav class="ch-toc" aria-label="本章目錄"></nav></div><div class="pager"></div></div>
+
+<!-- ================= CH5 ================= -->
+<div class="view wrap" data-route="ch5" hidden><div class="ch-layout"><section class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-no">05</div>
+    <div class="ch-layer">第 5 層 · 恐慌</div>
+    <h2>VIX 期限結構</h2>
+    <p class="lede">把 VIX 想成股市的保險費。平常買一年期的保險本來就比一個月期貴;如果某天一個月期的保費突然比一年期還貴,代表大家急著保「眼前」的風險。</p>
+  </div>
+
+  <div class="part"><div class="tag">是什麼</div><div class="body prose">
+    <p><strong>VIX</strong> 是用標普 500 選擇權價格推算出來的「市場預期未來 30 天的波動」,也就是<button class="term" data-term="iv">隱含波動率</button>。<strong>VIX3M</strong> 是同樣的計算,但看未來 93 天。</p>
+  </div></div>
+
+  <div class="part"><div class="tag">怎麼算</div><div class="body">
+    <div class="formula">期限結構比值 = <b>VIX ÷ VIX3M</b> &nbsp;&nbsp;小於 1:正常(<button class="term" data-term="contango">正價差</button>)&nbsp; 大於 1:恐慌(<button class="term" data-term="contango">逆價差</button>)</div>
+    <div class="card">
+      <div class="card-h"><h3>實驗:翻到任何一天,看保險費怎麼報價</h3><span class="note" id="vixDateNote"></span></div>
+      <div class="presets" id="vixPresets"></div>
+      <div class="ctrl" style="margin-top:12px"><label for="iVixDate">拖曳選擇日期<output id="oVixDate"></output></label><input type="range" id="iVixDate" min="0" max="100" step="1" value="100"></div>
+      <div class="lab" style="margin-top:16px">
+        <div class="controls">
+          <div class="policy">
+            <div class="pcard" id="p30"><div class="pt">短期保單 · 30 天</div><div class="pp" id="v30"></div><div class="pd">VIX</div></div>
+            <div class="pcard" id="p93"><div class="pt">中期保單 · 93 天</div><div class="pp" id="v93"></div><div class="pd">VIX3M</div></div>
+          </div>
+          <div class="kpis">
+            <div class="kpi"><div class="k">比值</div><div class="v" id="kRatio"></div><div class="d" id="kRatioS"></div></div>
+            <div class="kpi"><div class="k">標普 500 距一年高點</div><div class="v" id="kDd"></div></div>
+          </div>
+        </div>
+        <div style="min-width:0">
+          <div class="chart xs" id="cTerm"></div>
+          <div class="explain" id="vixText"></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="part"><div class="tag">為什麼有效</div><div class="body prose">
+    <p>正常時,時間越長、可能發生的意外越多,所以長天期的保險比較貴,VIX 低於 VIX3M。</p>
+    <p>當股市突然下跌,所有人都想立刻買保護,短天期選擇權被搶購,VIX 衝得比 VIX3M 快。比值翻過 1,代表<span class="hl">市場的擔心集中在眼前</span>。</p>
+  </div></div>
+
+  <div class="part"><div class="tag">怎麼解讀</div><div class="body">
+    <div class="card">
+      <div class="card-h"><h3>VIX ÷ VIX3M 與標普 500</h3>
+        <div class="seg" data-range="cVix"><button data-y="3">3 年</button><button data-y="10">10 年</button><button data-y="0" class="on">全部</button></div></div>
+      <div class="chart" id="cVix"></div>
+      <p class="cap">比值高於 1 的期間以紅色標示。資料:FRED VIXCLS、VXVCLS(VIX3M 自 2007 年 12 月開始)。</p>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>真實數據檢驗:比值翻過 1 之後,股市怎麼走?</h3><span class="note" id="vixEvNote"></span></div>
+      <div class="kpis" id="vixKpis"></div>
+      <div class="tbl" style="max-height:340px;overflow:auto;margin-top:12px"><table class="data-table" id="vixTable"></table></div>
+      <p class="cap">事件定義:比值在至少 20 個交易日都 ≤ 1 之後,首次收在 1 以上。報酬為標普 500 價格指數,不含股利。</p>
+    </div>
+  </div></div>
+
+  <div class="part"><div class="tag">什麼時候失靈</div><div class="body">
+    <div class="fail"><h4>它是「同步」指標,不是「預告」</h4><p>上表「訊號當天距一年高點」顯示:比值翻過 1 時,股市通常已經跌了一段。它告訴你「現在正在恐慌」,而不是「接下來要開始跌」。</p></div>
+    <div class="fail"><h4>極端恐慌常出現在底部附近</h4><p>從上表可以看到,訊號出現後 20 天和 60 天的平均報酬和平常差不多,上漲機率也超過一半。恐慌最高點常常是賣壓最後的階段,把它當成賣出訊號,很容易賣在最低點。</p></div>
+  </div></div>
+
+  <div class="part"><div class="tag">和其他指標</div><div class="body links">
+    <a class="link" href="#ch4"><span class="to">← 04 槓桿金絲雀</span><p>金絲雀先倒下,VIX 結構翻轉通常在後面才出現。</p></a>
+    <a class="link" href="#replay"><span class="to">→ 危機回放</span><p>把五個指標放在同一張時間軸上,看看歷次危機的亮燈順序。</p></a>
+  </div></div>
+
+  <div class="quiz" data-q="4"></div>
+</section><nav class="ch-toc" aria-label="本章目錄"></nav></div><div class="pager"></div></div>
+
+<!-- ================= REPLAY ================= -->
+<div class="view wrap" data-route="replay" hidden><section class="chapter" id="replay">
+  <div class="ch-head">
+    <div class="ch-no">▶</div>
+    <div class="ch-layer">把五層串起來</div>
+    <h2>危機回放:誰先亮燈?</h2>
+    <p class="lede">選一次歷史危機,五個指標的警示期間會排在同一條時間軸上。順序不會每次都一樣,但你會看到「越上層越早」的大方向。</p>
+  </div>
+  <div class="card" style="margin-top:32px">
+    <div class="replay-top">
+      <div class="seg" id="replaySeg"></div>
+      <span class="note cap" style="margin:0" id="replayNote"></span>
+    </div>
+    <div class="chart" id="cReplay" style="height:500px"></div>
+    <div class="firsts" id="firsts"></div>
+    <div class="explain" id="replayText"></div>
+    <p class="cap">警示規則(教材示範用):① DXY 高於 200 日均線 ② Baa 利差比 200 日均線高 0.2 個百分點以上 ③ 金銀比高於 200 日均線 ④ 3 倍槓桿 QQQ 低於 200 日均線(2010 年前為模擬)⑤ VIX ÷ VIX3M 大於 1。「首次亮燈」指時間窗口內第一個持續至少 5 個交易日的警示。</p>
+  </div>
+</section><div class="pager"></div></div>
+
+<!-- ================= NOW ================= -->
+<div class="view wrap" data-route="now" hidden><section class="chapter" id="now">
+  <div class="ch-head">
+    <div class="ch-no">●</div>
+    <div class="ch-layer">今天走到第幾層</div>
+    <h2>目前狀態</h2>
+    <p class="lede" id="nowLede">用同一套規則判讀最新數據。每張卡片的小圖是近一年走勢。</p>
+  </div>
+  <div class="dash" id="dash"></div>
+  <div class="verdict" id="verdict"></div>
+  <p class="cap">分級規則:<span class="pill s0"><i></i>正常</span> <span class="pill s1"><i></i>注意</span> <span class="pill s2"><i></i>警示</span>。規則為教學示範,不是交易訊號。</p>
+</section><div class="pager"></div></div>
+
+<!-- ================= GLOSSARY ================= -->
+<div class="view wrap" data-route="glossary" hidden><section class="chapter" id="glossary">
+  <h2 class="sec-title">名詞小卡</h2>
+  <p class="cap">內文中有虛線底線的詞,滑鼠移上去或點一下也能看到解釋。</p>
+  <dl class="gloss" id="gloss"></dl>
+</section><div class="pager"></div></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><h4>資料來源</h4><p>FRED(聖路易聯邦準備銀行):VIXCLS、VXVCLS、BAA10Y、BAMLH0A0HYM2、DFII10、DFF。Yahoo Finance:DX-Y.NYB、GC=F、SI=F、^GSPC、QQQ、TQQQ。</p></div>
+      <div><h4>資料時間</h4><p id="dataInfo"></p></div>
+      <div><h4>如何更新數據</h4><p>在資料夾內執行 <code>python update_data.py</code>,會重新下載全部數據並覆寫 <code>data/data.js</code>,重新整理網頁即可。</p></div>
+    </div>
+    <div class="disclaimer">本教材僅供教育用途,不構成任何投資建議。文中的警示規則是為了教學而簡化的示範,歷史數據檢驗不代表未來表現。投資前請自行判斷或諮詢合格專業人士。</div>
+  </div>
+</footer>
+</div>
+</div>
+<div class="pop" id="pop" role="tooltip"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<script src="data/data.js"></script>
+<script>
+(function(){
+"use strict";
+const RAW = window.MACRO_DATA;
+const DAY = 864e5;
+const $ = id => document.getElementById(id);
+const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fmt = (x,d=2) => x==null||!isFinite(x) ? '—' : x.toLocaleString('zh-TW',{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct = (x,d=1) => x==null||!isFinite(x) ? '—' : (x>=0?'+':'')+(x*100).toFixed(d)+'%';
+const ymd = t => new Date(t).toISOString().slice(0,10);
+const T = s => Date.parse(s+'T00:00:00Z');
+
+if(!RAW){document.querySelector('main').insertAdjacentHTML('afterbegin','<div class="wrap" style="padding:40px 0;color:var(--crit)">找不到 data/data.js。請先執行 python update_data.py 下載數據。</div>');return;}
+
+/* ---------------- data ---------------- */
+function unpack(s){const t=[],v=[];const b=T(s.start);let acc=0;for(let i=0;i<s.d.length;i++){acc+=s.d[i];t.push(b+acc*DAY);v.push(s.v[i]);}return{t,v};}
+const S={};for(const k in RAW.series)S[k]=unpack(RAW.series[k]);
+function align(a,b,f){const t=[],v=[];let i=0,j=0;while(i<a.t.length&&j<b.t.length){if(a.t[i]===b.t[j]){const r=f(a.v[i],b.v[j]);if(r!=null&&isFinite(r)){t.push(a.t[i]);v.push(r);}i++;j++;}else if(a.t[i]<b.t[j])i++;else j++;}return{t,v};}
+function sma(s,n){const v=new Array(s.v.length).fill(null);let sum=0;for(let i=0;i<s.v.length;i++){sum+=s.v[i];if(i>=n)sum-=s.v[i-n];if(i>=n-1)v[i]=sum/n;}return{t:s.t,v};}
+function P(s,t0,t1){const o=[];for(let i=0;i<s.t.length;i++){if(t0&&s.t[i]<t0)continue;if(t1&&s.t[i]>t1)break;if(s.v[i]!=null)o.push([s.t[i],s.v[i]]);}return o;}
+function asof(s,t){let lo=0,hi=s.t.length-1,r=-1;while(lo<=hi){const m=(lo+hi)>>1;if(s.t[m]<=t){r=m;lo=m+1;}else hi=m-1;}return r;}
+function segs(t,cond,minLen=1){const out=[];let st=-1;for(let i=0;i<t.length;i++){const c=cond(i);if(c&&st<0)st=i;if((!c||i===t.length-1)&&st>=0){const e=c?i:i-1;if(e-st+1>=minLen)out.push([t[st],t[e]]);st=-1;}}return out;}
+function lastI(s){return s.v.length-1;}
+
+const gsr = align(S.gold,S.silver,(g,s)=>g/s);
+const gsrMa = sma(gsr,200);
+const vixR = align(S.vix,S.vix3m,(a,b)=>a/b);
+const dxyMa = sma(S.dxy,200);
+const baaMa = sma(S.baa,200);
+const qqqMa = sma(S.qqq,200);
+const tqqqMa = sma(S.tqqq,200);
+const tqqqMa50 = sma(S.tqqq,50);
+// 3x 模擬 + 真實 TQQQ 拼接(用在 2010 年以前)
+const lev3 = (()=>{const q=S.qqq,t0=S.tqqq.t[0];const t=[q.t[0]],v=[100];for(let i=1;i<q.v.length&&q.t[i]<t0;i++){const r=q.v[i]/q.v[i-1]-1;t.push(q.t[i]);v.push(v[v.length-1]*(1+3*r-0.0095/252));}
+  const last=asof(q,t0-1);const r0=S.tqqq.v[0];// 以上市日前一天的模擬值接上真實 TQQQ
+  const prevQ=q.v[last],firstQ=q.v[asof(q,t0)];const simAtT0=v[v.length-1]*(1+3*(firstQ/prevQ-1));const f=simAtT0/r0;
+  for(let i=0;i<S.tqqq.t.length;i++){t.push(S.tqqq.t[i]);v.push(S.tqqq.v[i]*f);}return{t,v};})();
+const lev3Ma = sma(lev3,200);
+const SIM_END = S.tqqq.t[0];
+
+const CRISES=[['2000-03-24','2002-10-09','泡沫'],['2007-10-09','2009-03-09','海嘯'],['2011-07-22','2011-10-03','歐債'],['2015-08-10','2016-02-11','人民幣'],['2018-09-20','2018-12-24','貿易戰'],['2020-02-19','2020-03-23','疫情'],['2022-01-03','2022-10-12','升息'],['2025-02-19','2025-04-08','關稅']];
+
+/* ---------------- chart infra ---------------- */
+const charts=[];
+let CUR_H=440;
+function mount(id,build){const el=$(id);if(!el)return null;const rec={id,el,build,chart:null,h:0};charts.push(rec);render(rec);
+  new ResizeObserver(()=>{if(!el.clientWidth)return;if(!rec.chart||rec.dirty||Math.abs(el.clientHeight-rec.h)>2)render(rec);else rec.chart.resize();}).observe(el);return rec;}
+function render(rec){if(!rec.el.clientWidth){rec.dirty=true;return;}rec.dirty=false;let zoom=null;if(rec.chart){try{const dz=rec.chart.getOption().dataZoom;if(dz&&dz[0])zoom={start:dz[0].start,end:dz[0].end};}catch(e){}rec.chart.dispose();}
+  rec.h=CUR_H=rec.el.clientHeight||440;rec.chart=echarts.init(rec.el,null,{renderer:'canvas'});const o=rec.build();
+  if(zoom&&o.dataZoom&&rec.keepZoom!==false){o.dataZoom.forEach(d=>{delete d.startValue;d.start=zoom.start;d.end=zoom.end;});}
+  rec.chart.setOption(o,true);}
+function rerenderAll(){charts.forEach(render);renderSparks();}
+function getRec(id){return charts.find(c=>c.id===id);}
+function C(){return{ink:tok('--ink'),ink2:tok('--ink-2'),muted:tok('--muted'),line:tok('--line'),grid:tok('--grid'),axis:tok('--axis'),surface:tok('--surface'),surface2:tok('--surface-2'),accent:tok('--accent'),metal:tok('--metal'),s1:tok('--s1'),s2:tok('--s2'),s3:tok('--s3'),s4:tok('--s4'),s7:tok('--s7'),good:tok('--good'),warn:tok('--warn'),crit:tok('--crit'),band:tok('--band'),bandCrit:tok('--band-crit')};}
+const FONT='"IBM Plex Mono",ui-monospace,monospace';
+function baseTooltip(c){return{trigger:'axis',backgroundColor:c.surface,borderColor:c.line,borderWidth:1,textStyle:{color:c.ink,fontSize:12.5,fontFamily:'"Noto Sans TC",system-ui,sans-serif'},axisPointer:{type:'line',lineStyle:{color:c.axis},label:{show:false}},extraCssText:'box-shadow:0 6px 20px rgba(0,0,0,.12);border-radius:8px;'};}
+function tipFmt(units){return ps=>{if(!ps.length)return'';let h='<div style="font-family:'+FONT+';font-size:12px;opacity:.7;margin-bottom:4px">'+ymd(ps[0].value[0])+'</div>';const seen=new Set();ps.forEach(p=>{if(p.value==null||p.value[1]==null||seen.has(p.seriesName))return;seen.add(p.seriesName);const u=units[p.seriesName]||{d:2,s:''};h+='<div style="display:flex;justify-content:space-between;gap:18px"><span>'+p.marker+p.seriesName+'</span><b style="font-family:'+FONT+'">'+fmt(p.value[1],u.d)+u.s+'</b></div>';});return h;};}
+function crisisArea(c,showLabel){return{silent:true,itemStyle:{color:c.band},label:{show:showLabel,position:'insideTop',color:c.muted,fontSize:10.5,distance:4},data:CRISES.map(([a,b,n])=>[{xAxis:T(a),name:n},{xAxis:T(b)}])};}
+/* stacked panels sharing a time axis */
+function stack(panels,opt={}){
+  const c=C();const n=panels.length;const top=opt.top??34,bottom=58,gap=34;
+  const H=opt.heights||panels.map(()=>1);const sumH=H.reduce((a,b)=>a+b,0);
+  const grids=[],xs=[],ys=[],series=[];let cursor=0;const units={};const avail=Math.max(120,CUR_H-top-bottom-gap*(n-1));
+  panels.forEach((p,i)=>{
+    const frac=H[i]/sumH;
+    grids.push({left:56,right:18,top:Math.round(top+avail*cursor+gap*i),height:Math.round(avail*frac)});
+    cursor+=frac;
+    xs.push({type:'time',gridIndex:i,min:opt.min,axisLine:{lineStyle:{color:c.axis}},axisTick:{show:false},axisLabel:{show:i===n-1,color:c.muted,fontFamily:FONT,fontSize:11,hideOverlap:true},splitLine:{show:false}});
+    ys.push({type:p.log?'log':'value',gridIndex:i,scale:true,name:p.title,nameLocation:'end',nameGap:10,nameTextStyle:{color:c.ink2,fontSize:12,align:'left',padding:[0,0,0,-48]},axisLine:{show:false},axisTick:{show:false},splitNumber:3,axisLabel:{color:c.muted,fontFamily:FONT,fontSize:11,showMinLabel:!p.log,showMaxLabel:!p.log,formatter:p.yfmt||(v=>Math.abs(v)>=1000?(v/1000).toFixed(v%1000?1:0)+'k':+v.toFixed(2))},splitLine:{lineStyle:{color:c.grid}},min:p.ymin??(p.log?(v=>v.min*0.92):undefined),max:p.ymax??(p.log?(v=>v.max*1.08):undefined),logBase:10});
+    p.series.forEach((s,k)=>{
+      units[s.name]=s.unit||{d:2,s:''};
+      const o={name:s.name,type:'line',xAxisIndex:i,yAxisIndex:i,data:s.data,showSymbol:false,symbol:'none',sampling:'lttb',lineStyle:{width:s.width||1.6,color:s.color,type:s.dash?[4,4]:'solid',opacity:s.opacity??1},itemStyle:{color:s.color},emphasis:{disabled:true},z:s.z||2};
+      if(s.area)o.areaStyle={color:s.area};
+      if(k===0){const ma=[];if(opt.crisis!==false)ma.push(...crisisArea(c,i===0).data);
+        if(p.areas)ma.push(...p.areas.map(([a,b])=>[{xAxis:a,itemStyle:{color:p.areaColor||c.bandCrit}},{xAxis:b}]));
+        if(ma.length)o.markArea={silent:true,itemStyle:{color:c.band},label:{show:i===0&&opt.crisis!==false,position:'insideTop',color:c.muted,fontSize:10.5,distance:4},data:ma};
+        if(p.lines)o.markLine={silent:true,symbol:'none',label:{show:true,position:'insideStartTop',color:c.muted,fontSize:10.5,formatter:d=>d.name},lineStyle:{color:c.muted,type:[4,4],width:1},data:p.lines.map(l=>({yAxis:l.y,name:l.label}))};}
+      series.push(o);
+    });
+  });
+  return{animation:true,animationDuration:600,textStyle:{fontFamily:'"Noto Sans TC",system-ui,sans-serif'},
+    legend:opt.legend?{top:0,right:0,textStyle:{color:c.ink2,fontSize:12},icon:'roundRect',itemWidth:12,itemHeight:3,data:opt.legend}:undefined,
+    grid:grids,xAxis:xs,yAxis:ys,series,axisPointer:{link:[{xAxisIndex:'all'}]},
+    tooltip:Object.assign(baseTooltip(c),{formatter:tipFmt(units)}),
+    dataZoom:[{type:'inside',xAxisIndex:xs.map((_,i)=>i),startValue:opt.startValue},{type:'slider',xAxisIndex:xs.map((_,i)=>i),bottom:10,height:22,borderColor:c.line,backgroundColor:'transparent',fillerColor:c.band,dataBackground:{lineStyle:{color:c.axis},areaStyle:{color:c.surface2}},selectedDataBackground:{lineStyle:{color:c.accent},areaStyle:{color:c.surface2}},handleStyle:{color:c.surface,borderColor:c.axis},moveHandleStyle:{color:c.axis},textStyle:{color:c.muted,fontSize:10},brushSelect:false,startValue:opt.startValue,labelFormatter:v=>ymd(v)}]};
+}
+document.querySelectorAll('.seg[data-range]').forEach(seg=>{
+  seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;seg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+    const rec=getRec(seg.dataset.range);if(!rec)return;const y=+b.dataset.y;const end=Date.now();
+    rec.chart.dispatchAction(y?{type:'dataZoom',startValue:end-y*365.25*DAY,endValue:end}:{type:'dataZoom',start:0,end:100});});
+});
+
+/* ---------------- status rules ---------------- */
+function chg(s,i,n){return i>=n?s.v[i]/s.v[i-n]-1:null;}
+function pctRank(arr,x){let c=0;for(const v of arr)if(v<=x)c++;return c/arr.length;}
+const ST=[];
+(function computeStatus(){
+  let i=lastI(S.dxy);const dx=S.dxy.v[i],dm=dxyMa.v[i],d60=chg(S.dxy,i,60);
+  const ri=lastI(S.real10),rv=S.real10.v[ri],r1y=rv-S.real10.v[Math.max(0,ri-250)];
+  ST.push({id:'ch1',lv:'第 1 層 · 資金面',nm:'美元指數 DXY',val:fmt(dx,1),sub:`200 日均線 ${fmt(dm,1)} · 實質利率 ${fmt(rv,2)}%`,
+    s:dx>dm&&d60>0.03?2:dx>dm?1:0,why:dx>dm?(d60>0.03?`高於 200 日均線,且 60 日上漲 ${pct(d60)}`:`高於 200 日均線(60 日 ${pct(d60)})`):`低於 200 日均線,美元偏弱,資金面寬鬆(60 日 ${pct(d60)})`,
+    spark:P(S.dxy,S.dxy.t[i]-365*DAY),date:S.dxy.t[i]});
+  i=lastI(S.baa);const b=S.baa.v[i],bm=baaMa.v[i],dd=b-bm;const hi=lastI(S.hy);
+  ST.push({id:'ch2',lv:'第 2 層 · 信用面',nm:'Baa 信用利差',val:fmt(b,2)+'%',sub:`高收益債 ${fmt(S.hy.v[hi],2)}% · 比均線 ${dd>=0?'+':''}${fmt(dd,2)}`,
+    s:dd>0.5?2:dd>0.2?1:0,why:dd>0.2?`比 200 日均線高 ${fmt(dd,2)} 個百分點,利差正在擴大`:`接近或低於 200 日均線(差 ${dd>=0?'+':''}${fmt(dd,2)}),債市尚未擔心違約`,
+    spark:P(S.baa,S.baa.t[i]-365*DAY),date:S.baa.t[i]});
+  i=lastI(gsr);const g=gsr.v[i],gm=gsrMa.v[i],pr=pctRank(gsr.v,g);
+  ST.push({id:'ch3',lv:'第 3 層 · 風險偏好',nm:'金銀比',val:fmt(g,1),sub:`200 日均線 ${fmt(gm,1)} · 第 ${Math.round(pr*100)} 百分位`,
+    s:g>gm&&pr>0.8?2:g>gm?1:0,why:g>gm?`高於 200 日均線,資金偏向黃金`:`低於 200 日均線,白銀相對強勢,偏投機`,spark:P(gsr,gsr.t[i]-365*DAY),date:gsr.t[i]});
+  i=lastI(S.tqqq);const q=S.tqqq.v[i],qm=tqqqMa.v[i],q50=tqqqMa50.v[i];
+  ST.push({id:'ch4',lv:'第 4 層 · 股市內部',nm:'TQQQ 對 200 日線',val:pct(q/qm-1),sub:`收盤 ${fmt(q,2)} · 200 日線 ${fmt(qm,2)}`,
+    s:q<qm?2:q<q50?1:0,why:q<qm?'跌破 200 日均線,金絲雀已倒下':q<q50?'仍在 200 日線上,但已跌破 50 日線,動能轉弱':'站穩 200 日與 50 日均線,上漲動能仍在',spark:P(S.tqqq,S.tqqq.t[i]-365*DAY),date:S.tqqq.t[i]});
+  i=lastI(vixR);const r=vixR.v[i];
+  ST.push({id:'ch5',lv:'第 5 層 · 恐慌',nm:'VIX ÷ VIX3M',val:fmt(r,2),sub:`VIX ${fmt(S.vix.v[lastI(S.vix)],2)} · VIX3M ${fmt(S.vix3m.v[lastI(S.vix3m)],2)}`,
+    s:r>1?2:r>0.9?1:0,why:r>1?'逆價差:短期保險比中期貴,市場正在恐慌':r>0.9?'接近 1,短期避險需求升高':'正價差,市場平靜',spark:P(vixR,vixR.t[i]-365*DAY),date:vixR.t[i]});
+})();
+const SL=['正常','注意','警示'];
+const pill=s=>`<span class="pill s${s}"><i></i>${SL[s]}</span>`;
+
+/* hero chain */
+$('chainRow').innerHTML=ST.map((s,k)=>`<a class="node" href="#${s.id}"><div><div class="lv">${s.lv}</div><div class="nm">${s.nm}</div></div><div class="val">${s.val}</div><div class="sub">${s.sub}</div><div class="st">${pill(s.s)}</div></a>`).join('')+
+  '<div class="pipe" style="grid-row:2" aria-hidden="true"><svg viewBox="0 0 1000 18" preserveAspectRatio="none"><line x1="0" y1="9" x2="1000" y2="9" stroke="var(--line)" stroke-width="2"/><line class="flow" x1="0" y1="9" x2="1000" y2="9"/>'+[100,300,500,700,900].map((x,k)=>`<circle cx="${x}" cy="9" r="5" fill="var(--surface)" stroke="${['var(--good)','var(--warn)','var(--crit)'][ST[k].s]}" stroke-width="3"/>`).join('')+'</svg></div>';
+const newest=Math.max(...ST.map(s=>s.date));
+$('updatedTop').textContent='數據至 '+ymd(newest);
+$('chainMeta').textContent='數據至 '+ymd(newest)+' · 依教材示範規則判讀';
+$('dataInfo').innerHTML='下載時間 '+RAW.updated+'<br>'+Object.entries(RAW.meta).map(([k,m])=>`${m.code}:${m.first} ~ ${m.last}`).join('<br>');
+
+/* ======================= CH1 ======================= */
+mount('cDxyW',()=>{const c=C();const d=[['歐元 EUR',57.6],['日圓 JPY',13.6],['英鎊 GBP',11.9],['加幣 CAD',9.1],['瑞典克朗 SEK',4.2],['瑞士法郎 CHF',3.6]].reverse();
+  return{grid:{left:96,right:48,top:6,bottom:6},xAxis:{type:'value',max:60,show:false},yAxis:{type:'category',data:d.map(x=>x[0]),axisLine:{show:false},axisTick:{show:false},axisLabel:{color:c.ink2,fontSize:12.5}},
+  tooltip:Object.assign(baseTooltip(c),{trigger:'item',formatter:p=>p.name+':<b>'+p.value+'%</b>'}),
+  series:[{type:'bar',data:d.map((x,i)=>({value:x[1],itemStyle:{color:i===5?c.s1:c.axis,borderRadius:[0,4,4,0]}})),barWidth:'62%',label:{show:true,position:'right',color:c.ink,fontFamily:FONT,fontSize:12,formatter:'{c}%'}}]};});
+
+mount('cFund',()=>{const c=C();return stack([
+  {title:'美元指數 DXY',series:[{name:'DXY',data:P(S.dxy),color:c.s1},{name:'DXY 200 日均線',data:P(dxyMa),color:c.muted,dash:true,width:1}]},
+  {title:'10 年期實質利率 (%)',series:[{name:'實質利率',data:P(S.real10),color:c.s7,unit:{d:2,s:'%'}}],lines:[{y:0,label:'0%'}]},
+  {title:'黃金 (美元/盎司,對數)',log:true,series:[{name:'黃金',data:P(S.gold),color:c.metal}]}
+],{min:T('2003-01-01')});});
+
+/* opportunity cost lab */
+function oppLab(){const n=+$('iNom').value,inf=+$('iInf').value,r=n-inf;$('oNom').textContent=n.toFixed(2)+'%';$('oInf').textContent=inf.toFixed(2)+'%';
+  $('kReal').textContent=(r>=0?'':'')+r.toFixed(2)+'%';$('kOpp').textContent=(r>0?'$'+Math.round(r*10000).toLocaleString():'$0');
+  $('oppText').innerHTML=r>1.5?`實質利率 ${r.toFixed(2)}%,把錢放公債每年能確定多賺 $${Math.round(r*10000).toLocaleString()} 的購買力。抱著不生息的黃金,代價很明顯,<strong>黃金吸引力下降</strong>。`:
+    r>0?`實質利率 ${r.toFixed(2)}%,持有黃金的代價不大,黃金和公債的吸引力相近。`:
+    `實質利率是負的(${r.toFixed(2)}%):把錢放公債,扣掉通膨後反而變少。這時候持有黃金<strong>沒有機會成本</strong>,黃金最受青睞,例如 2020–2021 年。`;}
+['iNom','iInf'].forEach(id=>$(id).addEventListener('input',oppLab));oppLab();
+
+mount('cScatter',()=>{const c=C();const a=align(S.real10,S.gold,(r,g)=>g);const pre=[],post=[];const cut=T('2022-01-01');
+  for(let i=0;i<a.t.length;i+=5){const ri=asof(S.real10,a.t[i]);const pt=[S.real10.v[ri],a.v[i],a.t[i]];if(a.t[i]<T('2006-01-01'))continue;(a.t[i]<cut?pre:post).push(pt);}
+  return{grid:{left:56,right:16,top:30,bottom:44},legend:{top:0,right:0,textStyle:{color:c.ink2,fontSize:12},data:['2006–2021','2022 之後']},
+  xAxis:{type:'value',name:'10 年期實質利率 (%)',nameLocation:'middle',nameGap:28,nameTextStyle:{color:c.muted,fontSize:12},axisLine:{lineStyle:{color:c.axis}},axisLabel:{color:c.muted,fontFamily:FONT,fontSize:11},splitLine:{lineStyle:{color:c.grid}}},
+  yAxis:{type:'log',min:v=>v.min*0.9,max:v=>v.max*1.1,name:'金價',nameTextStyle:{color:c.muted,fontSize:12},axisLine:{show:false},axisLabel:{showMinLabel:false,showMaxLabel:false,color:c.muted,fontFamily:FONT,fontSize:11},splitLine:{lineStyle:{color:c.grid}}},
+  tooltip:Object.assign(baseTooltip(c),{trigger:'item',formatter:p=>`${ymd(p.value[2])}<br>實質利率 <b>${fmt(p.value[0],2)}%</b><br>金價 <b>$${fmt(p.value[1],0)}</b>`}),
+  series:[{name:'2006–2021',type:'scatter',data:pre,symbolSize:6,itemStyle:{color:c.s1,opacity:.55,borderColor:c.surface,borderWidth:.5}},
+          {name:'2022 之後',type:'scatter',data:post,symbolSize:7,itemStyle:{color:c.s2,opacity:.8,borderColor:c.surface,borderWidth:.5}}]};});
+
+/* dash for cash */
+const DASH_PH=[['2020-02-19','2020-03-09','股市從高點下跌,黃金還在上漲,美元持平:這時黃金的避險功能正常運作。'],
+  ['2020-03-09','2020-03-19','恐慌加劇,機構被追繳保證金,只好賣掉黃金換美元現金。這 10 天黃金和股市一起跌,<strong>美元指數大漲約 8%</strong>。'],
+  ['2020-03-19','2020-04-30','3/19 Fed 對多國央行開放美元換匯額度,3/23 宣布無限量 QE。美元缺口被填補,美元回落,<strong>黃金率先反彈並創新高</strong>,股市隨後跟上。']];
+let dashP=0;
+mount('cDash',()=>{const c=C();const t0=T('2020-02-03'),t1=T('2020-04-30'),base=T('2020-02-19');
+  const idx=s=>{const b=s.v[asof(s,base)];return P(s,t0,t1).map(([t,v])=>[t,v/b*100]);};
+  return{grid:{left:44,right:18,top:34,bottom:30},legend:{top:0,right:0,textStyle:{color:c.ink2,fontSize:12},icon:'roundRect',itemWidth:12,itemHeight:3},
+  xAxis:{type:'time',splitNumber:6,axisLine:{lineStyle:{color:c.axis}},axisLabel:{color:c.muted,fontFamily:FONT,fontSize:11,hideOverlap:true,formatter:v=>{const d=new Date(v);return(d.getUTCMonth()+1)+'/'+d.getUTCDate();}},splitLine:{show:false}},
+  yAxis:{type:'value',scale:true,axisLabel:{color:c.muted,fontFamily:FONT,fontSize:11},splitLine:{lineStyle:{color:c.grid}}},
+  tooltip:Object.assign(baseTooltip(c),{formatter:tipFmt({})}),
+  series:[{name:'標普 500',type:'line',data:idx(S.spx),showSymbol:false,lineStyle:{width:2,color:c.ink2},itemStyle:{color:c.ink2},
+      markArea:{silent:true,data:DASH_PH.map(([a,b],k)=>[{xAxis:T(a),itemStyle:{color:k===dashP?c.bandCrit:'transparent'}},{xAxis:T(b)}])},
+      markLine:{silent:true,symbol:'none',lineStyle:{color:c.muted,type:[4,4]},label:{color:c.muted,fontSize:10.5,formatter:'{b}',position:'insideStartTop'},data:[{yAxis:100,name:'2/19 = 100'}]}},
+    {name:'黃金',type:'line',data:idx(S.gold),showSymbol:false,lineStyle:{width:2,color:c.metal},itemStyle:{color:c.metal}},
+    {name:'美元指數',type:'line',data:idx(S.dxy),showSymbol:false,lineStyle:{width:2,color:c.s1},itemStyle:{color:c.s1}}]};});
+function setDash(p){dashP=p;$('dashText').innerHTML=DASH_PH[p][2];document.querySelectorAll('#dashSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.p===p));render(getRec('cDash'));}
+$('dashSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setDash(+b.dataset.p);});
+$('dashText').innerHTML=DASH_PH[0][2];
+
+/* ======================= CH2 ======================= */
+function credit(){const drf=+$('iRf').value,dsp=+$('iSp').value;const rf0=4,sp0=2,rf1=Math.max(0,rf0+drf),sp1=Math.max(0.25,sp0+dsp);
+  $('oRf').textContent=(drf>=0?'+':'')+drf.toFixed(2)+'%';$('oSp').textContent=(dsp>=0?'+':'')+dsp.toFixed(2)+'%';
+  const debt=500,ebit=60,tax=.2,sh=10;const i0=debt*(rf0+sp0)/100,i1=debt*(rf1+sp1)/100;const e0=(ebit-i0)*(1-tax)/sh,e1=(ebit-i1)*(1-tax)/sh;const c0=ebit/i0,c1=ebit/i1;
+  const maxH=14;const h=v=>Math.round(v/maxH*205)+'px';
+  $('b0r').style.height=h(rf0);$('b0s').style.height=h(sp0);$('b1r').style.height=h(rf1);$('b1s').style.height=h(sp1);
+  $('b0r').textContent=rf0.toFixed(1)+'%';$('b0s').textContent=sp0.toFixed(1)+'%';$('b1r').textContent=rf1>=1?rf1.toFixed(2)+'%':'';$('b1s').textContent=sp1>=1?sp1.toFixed(2)+'%':'';
+  $('tot0').textContent=(rf0+sp0).toFixed(2)+'%';$('tot1').textContent=(rf1+sp1).toFixed(2)+'%';
+  $('kInt').textContent=fmt(i1,1)+' 億';$('kIntD').textContent='原本 '+fmt(i0,1)+' 億';
+  $('kEps').textContent='$'+fmt(e1,2);$('kEpsD').innerHTML=`<span class="${e1<e0?'neg':e1>e0?'pos':''}">${pct(e1/e0-1)}</span>(原本 $${fmt(e0,2)})`;
+  $('kCov').textContent=fmt(c1,1)+' 倍';$('kCovD').textContent=c1<1.5?'低於 1.5 倍:評等可能被降至垃圾級':c1<3?'偏弱,債權人開始擔心':'安全';
+  let t;if(dsp===0&&drf!==0)t=`公司債殖利率從 ${(rf0+sp0).toFixed(2)}% 變成 ${(rf1+sp1).toFixed(2)}%,但<strong>信用利差仍是 ${sp1.toFixed(2)}%,沒有擴大</strong>。升息只是讓整體借錢環境變貴,不代表市場更擔心這家公司違約。`;
+  else if(dsp>0&&drf<=0)t=`公債利率沒升,但投資人擔心違約,要求多 ${dsp.toFixed(2)}% 的補償,<strong>利差擴大到 ${sp1.toFixed(2)}%</strong>。這種「無升息的利差擴大」最值得警覺,代表債市在擔心景氣。`;
+  else if(dsp>0&&drf>0)t=`最糟的組合:公債利率 +${drf.toFixed(2)}%、利差 +${dsp.toFixed(2)}%,兩層成本疊加,借錢成本從 ${(rf0+sp0).toFixed(2)}% 跳到 ${(rf1+sp1).toFixed(2)}%,EPS ${pct(e1/e0-1)}。這就是 2022 年許多高負債企業股價重挫的原因。`;
+  else if(dsp<0||drf<0)t=`借錢成本下降到 ${(rf1+sp1).toFixed(2)}%,獲利改善。利差收斂通常出現在景氣復甦、或央行出手救市時。`;
+  else t='用左邊的按鈕或滑桿調整,觀察公債利率和信用利差分別變動時,借錢成本和每股盈餘怎麼變。';
+  $('crText').innerHTML=t;}
+['iRf','iSp'].forEach(id=>$(id).addEventListener('input',credit));
+$('crPresets').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('iRf').value=b.dataset.rf;$('iSp').value=b.dataset.sp;credit();});
+credit();
+
+mount('cCredit',()=>{const c=C();return stack([
+  {title:'Baa 公司債 − 10 年公債 (%)',series:[{name:'Baa 利差',data:P(S.baa),color:c.s2,unit:{d:2,s:'%'},area:c.bandCrit},{name:'利差 200 日均線',data:P(baaMa),color:c.muted,dash:true,width:1,unit:{d:2,s:'%'}}]},
+  {title:'標普 500(對數)',log:true,series:[{name:'標普 500',data:P(S.spx),color:c.ink2}]}
+],{heights:[1.2,1]});});
+mount('cHy',()=>{const c=C();const d=P(S.hy);return{grid:{left:44,right:16,top:16,bottom:26},
+  xAxis:{type:'time',axisLine:{lineStyle:{color:c.axis}},axisLabel:{color:c.muted,fontFamily:FONT,fontSize:11},splitLine:{show:false}},
+  yAxis:{type:'value',scale:true,axisLabel:{color:c.muted,fontFamily:FONT,fontSize:11,formatter:'{value}%'},splitLine:{lineStyle:{color:c.grid}}},
+  tooltip:Object.assign(baseTooltip(c),{formatter:tipFmt({'高收益債利差':{d:2,s:'%'}})}),
+  series:[{name:'高收益債利差',type:'line',data:d,showSymbol:false,lineStyle:{width:1.8,color:c.s2},itemStyle:{color:c.s2},areaStyle:{color:c.bandCrit},
+    markPoint:{symbol:'circle',symbolSize:8,itemStyle:{color:c.s2,borderColor:c.surface,borderWidth:2},label:{show:true,position:'top',color:c.ink,fontFamily:FONT,fontSize:11.5,formatter:p=>p.value[1].toFixed(2)+'%'},data:[{coord:d[d.length-1],value:d[d.length-1]}]}}]};});
+(()=>{const v=S.hy.v;$('hyNote').textContent=`最新 ${fmt(v[v.length-1],2)}% · 三年區間 ${fmt(Math.min(...v),2)}–${fmt(Math.max(...v),2)}%`;})();
+
+/* ======================= CH3 ======================= */
+const gL=S.gold.v[lastI(S.gold)],sL=S.silver.v[lastI(S.silver)],gsrL=gL/sL;
+$('gsrNow').textContent=`$${fmt(gL,0)} ÷ $${fmt(sL,2)} = ${fmt(gsrL,1)}`;
+const gsrSorted=gsr.v.slice().sort((a,b)=>a-b);const G0=Math.floor(gsrSorted[0]),G1=Math.ceil(gsrSorted[gsrSorted.length-1]);
+function gsLab(){const g=+$('iG').value/100,s=+$('iS').value/100;$('oG').textContent=pct(g,0);$('oS').textContent=pct(s,0);
+  const nr=gL*(1+g)/(sL*(1+s));const pr=pctRank(gsr.v,nr);
+  $('kGsr').textContent=fmt(nr,1);$('kGsrD').innerHTML=`原本 ${fmt(gsrL,1)},<span class="${nr>gsrL?'neg':'pos'}">${nr>=gsrL?'+':''}${fmt(nr-gsrL,1)}</span>`;
+  $('kPct').textContent='第 '+Math.round(pr*100);
+  const pos=x=>Math.min(100,Math.max(0,(x-G0)/(G1-G0)*100))+'%';
+  $('mkOld').style.left=pos(gsrL);$('mkOld').querySelector('span').textContent='現在 '+fmt(gsrL,0);
+  $('mkNew').style.left=pos(nr);$('mkNew').querySelector('span').textContent=fmt(nr,0);
+  $('gauge').querySelector('.ends').innerHTML=`<span>${G0} · 白銀強(偏投機)</span><span>黃金強(偏避險)· ${G1}</span>`;
+  $('gsText').innerHTML=nr<gsrL-0.5?`白銀漲得比黃金多(或跌得比較少),比值下降到 ${fmt(nr,1)}:資金願意承擔風險,工業需求也在增加,<strong>偏向景氣擴張</strong>。`:
+    nr>gsrL+0.5?`黃金比白銀強,比值升到 ${fmt(nr,1)}:資金退回避險資產,白銀的投機買盤和工業需求轉弱,<strong>偏向避險、景氣降溫</strong>。`:'金銀漲幅相近,比值幾乎不變,沒有明顯訊號。';}
+['iG','iS'].forEach(id=>$(id).addEventListener('input',gsLab));
+$('gsPresets').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('iG').value=b.dataset.g;$('iS').value=b.dataset.s;gsLab();});
+gsLab();
+mount('cGsr',()=>{const c=C();return stack([
+  {title:'金銀比',series:[{name:'金銀比',data:P(gsr),color:c.metal,unit:{d:1,s:''}},{name:'200 日均線',data:P(gsrMa),color:c.muted,dash:true,width:1,unit:{d:1,s:''}}],lines:[{y:80,label:'80 偏避險'},{y:50,label:'50 偏投機'}]},
+  {title:'標普 500(對數)',log:true,series:[{name:'標普 500',data:P(S.spx),color:c.ink2}]}
+],{heights:[1.3,1],min:T('2000-08-29')});});
+
+/* ======================= CH4 ======================= */
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+let seed=7;
+function gauss(r){let u=0,v=0;while(u===0)u=r();while(v===0)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function sim(){const L=+$('iLev').value,sig=+$('iVol').value/100,mu=+$('iDrift').value/100/252,mode=$('iMode').value,N=252;const r=rng(seed);
+  const a=[100],b=[100];for(let i=1;i<=N;i++){const x=mode==='alt'?mu+(i%2?sig:-sig):mu+sig*gauss(r);a.push(a[i-1]*(1+x));b.push(Math.max(0.01,b[i-1]*(1+L*x)));}
+  return{L,sig,a,b,naive:a.map(v=>100+L*(v-100))};}
+let SIM=null;
+function decay(){$('oLev').textContent=$('iLev').value+' 倍';$('oVol').textContent=(+$('iVol').value).toFixed(1)+'%';$('oDrift').textContent=(+$('iDrift').value>=0?'+':'')+$('iDrift').value+'%';
+  SIM=sim();const ra=SIM.a[252]/100-1,rb=SIM.b[252]/100-1,rn=SIM.L*ra;
+  $('kIdx').textContent=pct(ra);$('kNaive').textContent=pct(rn);$('kLev').textContent=pct(rb);
+  $('kLev').className='v '+(rb<rn?'neg':'pos');
+  const L=SIM.L,s=SIM.sig;const dragY=(L*L-L)/2*s*s*252;
+  $('decayText').innerHTML=`理論衰減約每年 <b class="num">${(dragY*100).toFixed(1)}%</b>((${L}²−${L})÷2 × ${(s*100).toFixed(1)}%² × 252 天)。這條路徑上,槓桿 ETF 比「指數報酬 × ${L}」${rb<rn?'少了':'多了'} <b class="num">${Math.abs((rb-rn)*100).toFixed(1)}</b> 個百分點。`+
+    (Math.abs(ra)<0.05?` <strong>指數幾乎沒漲,槓桿 ETF 卻${rb<-0.03?'明顯下跌':'沒賺到'}</strong>,這就是金絲雀先倒下的原因。`:'')+(+$('iDrift').value>15&&s<0.012?' 趨勢強、波動低時,槓桿反而會贏過 3 倍(複利效果),所以多頭市場槓桿 ETF 很漂亮。':'');
+  const rec=getRec('cDecay');if(rec)render(rec);}
+mount('cDecay',()=>{if(!SIM)SIM=sim();const c=C();const x=SIM.a.map((_,i)=>i);return{grid:{left:44,right:34,top:30,bottom:30},
+  legend:{top:0,right:0,textStyle:{color:c.ink2,fontSize:12},icon:'roundRect',itemWidth:12,itemHeight:3},
+  xAxis:{type:'category',data:x,axisLine:{lineStyle:{color:c.axis}},axisTick:{show:false},axisLabel:{color:c.muted,fontFamily:FONT,fontSize:11,interval:62,formatter:v=>'第'+v+'天'}},
+  yAxis:{type:'value',scale:true,axisLabel:{color:c.muted,fontFamily:FONT,fontSize:11},splitLine:{lineStyle:{color:c.grid}}},
+  tooltip:Object.assign(baseTooltip(c),{formatter:ps=>'第 '+ps[0].axisValue+' 天<br>'+ps.map(p=>p.marker+p.seriesName+' <b style="font-family:'+FONT+'">'+fmt(p.value,1)+'</b>').join('<br>')}),
+  series:[{name:'指數 1 倍',type:'line',data:SIM.a,showSymbol:false,lineStyle:{width:1.8,color:c.ink2},itemStyle:{color:c.ink2},markLine:{silent:true,symbol:'none',lineStyle:{color:c.muted,type:[4,4]},label:{show:false},data:[{yAxis:100}]}},
+    {name:'指數報酬 × L',type:'line',data:SIM.naive,showSymbol:false,lineStyle:{width:1.4,color:c.s1,type:[5,4]},itemStyle:{color:c.s1}},
+    {name:'槓桿 ETF',type:'line',data:SIM.b,showSymbol:false,lineStyle:{width:2,color:c.crit},itemStyle:{color:c.crit}}]};});
+['iLev','iVol','iDrift','iMode'].forEach(id=>$(id).addEventListener('input',decay));
+$('reroll').addEventListener('click',()=>{seed=(Math.random()*1e9)|0;decay();});
+decay();
+
+const qBelow=S.qqq.v.map((v,i)=>qqqMa.v[i]==null?null:v<qqqMa.v[i]);
+const tBelow=S.tqqq.v.map((v,i)=>tqqqMa.v[i]==null?null:v<tqqqMa.v[i]);
+mount('cCanary',()=>{const c=C();const t0=S.tqqq.t[0];
+  return stack([
+    {title:'QQQ(1 倍,對數)',log:true,areas:segs(S.qqq.t,i=>qBelow[i]===true&&S.qqq.t[i]>=t0),series:[{name:'QQQ',data:P(S.qqq,t0),color:c.ink2},{name:'QQQ 200 日均線',data:P(qqqMa,t0),color:c.muted,dash:true,width:1}]},
+    {title:'TQQQ(3 倍,對數)',log:true,areas:segs(S.tqqq.t,i=>tBelow[i]===true),series:[{name:'TQQQ',data:P(S.tqqq),color:c.crit},{name:'TQQQ 200 日均線',data:P(tqqqMa),color:c.muted,dash:true,width:1}]}
+  ],{min:t0,crisis:false});});
+
+(function leadStats(){
+  const q=S.qqq;const lv=align(q,lev3,(a,b)=>b);const lm=sma(lv,200);
+  // lv 與 q 可能因日期差一兩筆而錯位,改用 lv 自己的日期索引
+  const qi=t=>asof(q,t);
+  const qb=i=>qqqMa.v[i]!=null&&q.v[i]<qqqMa.v[i];
+  const lb=i=>lm.v[i]!=null&&lv.v[i]<lm.v[i];
+  const rows=[];let qAbove=0;
+  for(let i=1;i<q.v.length;i++){if(qqqMa.v[i]==null)continue;if(!qb(i)){qAbove++;continue;}
+    if(qAbove>=30){const t=q.t[i];const li=asof(lv,t);let best=null,run=0;
+      for(let k=Math.max(1,li-160);k<=Math.min(lv.v.length-1,li+10);k++){if(lm.v[k]==null)continue;if(!lb(k)){run++;continue;}if(run>=20&&lv.t[k]>=t-200*DAY)best=k;run=0;}
+      if(best!=null){const lead=asof(q,t)-asof(q,lv.t[best]);const dd=q.v[i]/Math.max(...q.v.slice(Math.max(0,i-252),i+1))-1;rows.push({t,tl:lv.t[best],lead,dd,sim:lv.t[best]<SIM_END});}}
+    qAbove=0;}
+  // 假警報
+  let alarms=0,falseA=0,run=0;
+  for(let k=1;k<lv.v.length;k++){if(lm.v[k]==null)continue;if(!lb(k)){run++;continue;}
+    if(run>=20){alarms++;const i0=qi(lv.t[k]);let hit=false;for(let j=Math.max(0,i0-10);j<=Math.min(q.v.length-1,i0+60);j++)if(qb(j)){hit=true;break;}if(!hit)falseA++;}run=0;}
+  const leads=rows.map(r=>r.lead).sort((a,b)=>a-b);const med=leads.length?leads[Math.floor(leads.length/2)]:null;const earlier=rows.filter(r=>r.lead>0).length;
+  $('leadKpis').innerHTML=`<div class="kpi"><div class="k">指數跌破次數</div><div class="v">${rows.length}</div><div class="d">2000 年至今</div></div>
+    <div class="kpi"><div class="k">TQQQ 較早示警</div><div class="v">${earlier} 次</div><div class="d">占 ${Math.round(earlier/rows.length*100)}%</div></div>
+    <div class="kpi"><div class="k">領先天數中位數</div><div class="v">${med} 天</div><div class="d">交易日</div></div>
+    <div class="kpi"><div class="k">假警報</div><div class="v">${falseA} / ${alarms}</div><div class="d">TQQQ 跌破後 QQQ 未跟進</div></div>`;
+  $('leadNote').textContent='共 '+rows.length+' 次';
+  $('leadTable').innerHTML='<thead><tr><th>QQQ 跌破日</th><th>3 倍跌破日</th><th>領先(交易日)</th><th>QQQ 當時距一年高點</th></tr></thead><tbody>'+
+    rows.slice().reverse().map(r=>`<tr class="${r.sim?'sim':''}"><td>${ymd(r.t)}</td><td>${ymd(r.tl)}${r.sim?' 模擬':''}</td><td class="${r.lead>0?'pos':r.lead<0?'neg':''}">${r.lead>0?'+':''}${r.lead}</td><td>${pct(r.dd)}</td></tr>`).join('')+'</tbody>';
+})();
+
+/* ======================= CH5 ======================= */
+const vT=vixR.t;const vIdx=t=>asof(vixR,t);
+const VIX_PRESETS=[['平靜的一天','2017-11-03'],['2008 雷曼倒閉','2008-10-24'],['2011 美債降評','2011-08-08'],['2018 波動率崩潰','2018-02-05'],['2020 疫情','2020-03-16'],['2022 升息','2022-06-13'],['2024 日圓套利','2024-08-05'],['2025 關稅','2025-04-08'],['最新','']];
+$('vixPresets').innerHTML=VIX_PRESETS.map(([n,d])=>`<button data-d="${d}">${n}</button>`).join('');
+$('iVixDate').max=vT.length-1;$('iVixDate').value=vT.length-1;
+let vixI=vT.length-1;
+function vixLab(){const i=vixI;const t=vT[i];const v30=S.vix.v[asof(S.vix,t)],v93=S.vix3m.v[asof(S.vix3m,t)],r=vixR.v[i];
+  $('oVixDate').textContent=ymd(t);$('vixDateNote').textContent=ymd(t);
+  $('v30').textContent=fmt(v30,2);$('v93').textContent=fmt(v93,2);
+  $('p30').classList.toggle('hot',v30>v93);$('p93').classList.toggle('hot',v93>v30);
+  $('kRatio').textContent=fmt(r,2);const s=r>1?2:r>0.9?1:0;$('kRatioS').innerHTML=pill(s);
+  const si=asof(S.spx,t);const hi=Math.max(...S.spx.v.slice(Math.max(0,si-252),si+1));$('kDd').textContent=pct(S.spx.v[si]/hi-1);
+  $('vixText').innerHTML=r>1.15?`短期保費比中期貴 ${((r-1)*100).toFixed(0)}%,<strong>嚴重逆價差</strong>。市場正在恐慌,大家不計代價買眼前的保護。此時標普 500 距一年高點 ${pct(S.spx.v[si]/hi-1)}。`:
+    r>1?`短期保費略高於中期,進入<strong>逆價差</strong>。眼前的不確定性升高。`:r>0.9?`曲線接近平坦,短期避險需求正在升高,值得留意。`:`短期保費比中期便宜 ${((1-r)*100).toFixed(0)}%,<strong>正常的正價差</strong>,市場平靜。`;
+  const rec=getRec('cTerm');if(rec)render(rec);}
+mount('cTerm',()=>{const c=C();const t=vT[vixI];const v30=S.vix.v[asof(S.vix,t)],v93=S.vix3m.v[asof(S.vix3m,t)];const col=v30>v93?c.crit:c.good;
+  // 長期平均曲線做參考
+  return{grid:{left:44,right:24,top:24,bottom:30},
+  xAxis:{type:'value',min:0,max:110,interval:30,axisLine:{lineStyle:{color:c.axis}},axisLabel:{color:c.muted,fontFamily:FONT,fontSize:11,formatter:v=>v?v+' 天':''},splitLine:{show:false}},
+  yAxis:{type:'value',min:0,max:Math.max(40,Math.ceil(Math.max(v30,v93)/10)*10+5),axisLabel:{color:c.muted,fontFamily:FONT,fontSize:11},splitLine:{lineStyle:{color:c.grid}},name:'隱含波動率',nameTextStyle:{color:c.muted,fontSize:11.5,align:'left',padding:[0,0,0,-30]}},
+  tooltip:{show:false},
+  series:[{type:'line',data:[[30,19.5],[93,21.4]],lineStyle:{color:c.muted,type:[4,4],width:1.2},symbol:'circle',symbolSize:6,itemStyle:{color:c.muted},label:{show:false},silent:true,name:'長期平均',endLabel:{show:true,formatter:'長期平均',color:c.muted,fontSize:11}},
+    {type:'line',data:[[30,v30],[93,v93]],lineStyle:{color:col,width:3},symbol:'circle',symbolSize:12,itemStyle:{color:col,borderColor:c.surface,borderWidth:2},areaStyle:{color:col,opacity:.08},
+      label:{show:true,position:'top',color:c.ink,fontFamily:FONT,fontSize:13,fontWeight:600,formatter:p=>p.value[1].toFixed(1)},animationDuration:400}]};});
+$('iVixDate').addEventListener('input',e=>{vixI=+e.target.value;vixLab();});
+$('vixPresets').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;vixI=b.dataset.d?vIdx(T(b.dataset.d)):vT.length-1;$('iVixDate').value=vixI;vixLab();});
+vixLab();
+
+mount('cVix',()=>{const c=C();return stack([
+  {title:'VIX ÷ VIX3M',areas:segs(vixR.t,i=>vixR.v[i]>1,1),series:[{name:'比值',data:P(vixR),color:c.s7,width:1.2}],lines:[{y:1,label:'1.0 翻轉線'}]},
+  {title:'標普 500(對數)',log:true,series:[{name:'標普 500',data:P(S.spx,vixR.t[0]),color:c.ink2}]}
+],{min:vixR.t[0],heights:[1,1]});});
+
+(function vixStats(){const spx=S.spx;const ev=[];let below=0;
+  for(let i=0;i<vixR.v.length;i++){if(vixR.v[i]<=1){below++;continue;}if(below>=20){const t=vixR.t[i];const k=asof(spx,t);const f=n=>k+n<spx.v.length?spx.v[k+n]/spx.v[k]-1:null;const hi=Math.max(...spx.v.slice(Math.max(0,k-252),k+1));
+      let peak=vixR.v[i];for(let j=i;j<Math.min(vixR.v.length,i+30);j++)peak=Math.max(peak,vixR.v[j]);
+      ev.push({t,dd:spx.v[k]/hi-1,f20:f(20),f60:f(60),peak});}below=0;}
+  const k0=asof(spx,vixR.t[0]);let s20=0,n20=0,s60=0,n60=0;for(let k=k0;k<spx.v.length;k++){if(k+20<spx.v.length){s20+=spx.v[k+20]/spx.v[k]-1;n20++;}if(k+60<spx.v.length){s60+=spx.v[k+60]/spx.v[k]-1;n60++;}}
+  const av=(a,key)=>{const x=a.map(e=>e[key]).filter(v=>v!=null);return x.reduce((p,q)=>p+q,0)/x.length;};
+  const win=(a,key)=>{const x=a.map(e=>e[key]).filter(v=>v!=null);return x.filter(v=>v>0).length/x.length;};
+  $('vixKpis').innerHTML=`<div class="kpi"><div class="k">翻轉事件</div><div class="v">${ev.length}</div><div class="d">2007 年 12 月至今</div></div>
+    <div class="kpi"><div class="k">訊號當天距一年高點</div><div class="v neg">${pct(av(ev,'dd'))}</div><div class="d">平均,代表已經在跌</div></div>
+    <div class="kpi"><div class="k">之後 20 天報酬</div><div class="v">${pct(av(ev,'f20'))}</div><div class="d">上漲機率 ${Math.round(win(ev,'f20')*100)}% · 全期間平均 ${pct(s20/n20)}</div></div>
+    <div class="kpi"><div class="k">之後 60 天報酬</div><div class="v">${pct(av(ev,'f60'))}</div><div class="d">上漲機率 ${Math.round(win(ev,'f60')*100)}% · 全期間平均 ${pct(s60/n60)}</div></div>`;
+  $('vixEvNote').textContent='共 '+ev.length+' 次';
+  $('vixTable').innerHTML='<thead><tr><th>翻轉日</th><th>30 天內最高比值</th><th>當天距一年高點</th><th>之後 20 天</th><th>之後 60 天</th></tr></thead><tbody>'+
+    ev.slice().reverse().map(e=>`<tr><td>${ymd(e.t)}</td><td>${fmt(e.peak,2)}</td><td>${pct(e.dd)}</td><td class="${e.f20==null?'':e.f20>0?'pos':'neg'}">${e.f20==null?'尚未滿':pct(e.f20)}</td><td class="${e.f60==null?'':e.f60>0?'pos':'neg'}">${e.f60==null?'尚未滿':pct(e.f60)}</td></tr>`).join('')+'</tbody>';
+})();
+
+/* ======================= REPLAY ======================= */
+const RULES=[
+  {n:'資金面',f:'DXY > 200 日線',s:S.dxy,c:i=>dxyMa.v[i]!=null&&S.dxy.v[i]>dxyMa.v[i]},
+  {n:'信用利差',f:'Baa 利差 > 均線 +0.2',s:S.baa,c:i=>baaMa.v[i]!=null&&S.baa.v[i]>baaMa.v[i]+0.2},
+  {n:'金銀比',f:'金銀比 > 200 日線',s:gsr,c:i=>gsrMa.v[i]!=null&&gsr.v[i]>gsrMa.v[i]},
+  {n:'槓桿金絲雀',f:'3 倍 < 200 日線',s:lev3,c:i=>lev3Ma.v[i]!=null&&lev3.v[i]<lev3Ma.v[i]},
+  {n:'VIX 結構',f:'VIX/VIX3M > 1',s:vixR,c:i=>vixR.v[i]>1}];
+const CASES=[['2007–09 金融海嘯','2007-01-01','2009-06-30','2007-10-09'],['2011 歐債危機','2011-01-01','2011-12-31','2011-04-29'],['2015–16 人民幣','2015-03-01','2016-04-30','2015-05-21'],['2018 升息+貿易戰','2018-05-01','2019-03-31','2018-09-20'],['2020 疫情','2019-10-01','2020-07-31','2020-02-19'],['2022 通膨升息','2021-07-01','2022-12-31','2022-01-03'],['2025 關稅','2024-10-01','2025-07-31','2025-02-19']];
+let caseI=4;
+$('replaySeg').innerHTML=CASES.map((c,i)=>`<button data-i="${i}" class="${i===caseI?'on':''}">${c[0]}</button>`).join('');
+$('replaySeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;caseI=+b.dataset.i;$('replaySeg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));replay();});
+let REP=null;
+function replayData(){const [name,a,b,peak]=CASES[caseI];const t0=T(a),t1=T(b),tp=T(peak);
+  const rows=RULES.map(R=>{const sg=segs(R.s.t,i=>R.s.t[i]>=t0&&R.s.t[i]<=t1&&R.c(i),1);const has=R.s.t[0]<=t0+30*DAY;
+    const first=segs(R.s.t,i=>R.s.t[i]>=t0&&R.s.t[i]<=t1&&R.c(i),5)[0];return{...R,sg,first:first?first[0]:null,has};});
+  return{name,t0,t1,tp,rows};}
+mount('cReplay',()=>{const c=C();REP=REP||replayData();const {t0,t1,tp,rows}=REP;const cols=[c.s1,c.s2,c.metal,c.crit,c.s7];
+  const rects=[];rows.forEach((r,k)=>r.sg.forEach(([a,b])=>rects.push([a,b+DAY,k])));
+  return{grid:[{left:96,right:18,top:40,height:'34%'},{left:96,right:18,top:'52%',bottom:30}],
+  xAxis:[{type:'time',gridIndex:0,min:t0,max:t1,axisLabel:{show:false},axisLine:{lineStyle:{color:c.axis}},splitLine:{show:false}},{type:'time',gridIndex:1,min:t0,max:t1,axisLine:{lineStyle:{color:c.axis}},axisLabel:{color:c.muted,fontFamily:FONT,fontSize:11,hideOverlap:true},splitLine:{show:true,lineStyle:{color:c.grid}}}],
+  yAxis:[{type:'value',gridIndex:0,scale:true,name:'標普 500',nameTextStyle:{color:c.ink2,fontSize:12,align:'right'},axisLabel:{color:c.muted,fontFamily:FONT,fontSize:11},splitLine:{lineStyle:{color:c.grid}},splitNumber:3},
+    {type:'category',gridIndex:1,data:rows.map(r=>r.n),inverse:true,axisLine:{show:false},axisTick:{show:false},axisLabel:{color:c.ink,fontSize:12.5,fontWeight:500}}],
+  axisPointer:{link:[{xAxisIndex:'all'}]},
+  tooltip:Object.assign(baseTooltip(c),{trigger:'axis',formatter:ps=>{const p=ps.find(x=>x.seriesName==='標普 500');if(!p)return'';const t=p.value[0];
+    return '<div style="font-family:'+FONT+';font-size:12px;opacity:.7">'+ymd(t)+'</div>標普 500 <b style="font-family:'+FONT+'">'+fmt(p.value[1],0)+'</b><br>'+rows.map((r,k)=>{const i=asof(r.s,t);const on=i>=0&&r.c(i);return `<span style="color:${on?cols[k]:c.muted}">${on?'■':'□'}</span> ${r.n}${on?' 警示':''}`;}).join('<br>');}}),
+  series:[{name:'標普 500',type:'line',xAxisIndex:0,yAxisIndex:0,data:P(S.spx,t0,t1),showSymbol:false,lineStyle:{width:2,color:c.ink2},itemStyle:{color:c.ink2},
+      markLine:{silent:true,symbol:'none',lineStyle:{color:c.crit,type:[4,4]},label:{formatter:'股市高點',color:c.crit,fontSize:11},data:[{xAxis:tp}]}},
+    {name:'警示',type:'custom',xAxisIndex:1,yAxisIndex:1,data:rects,
+      renderItem:(params,api)=>{const k=api.value(2);const s=api.coord([api.value(0),k]),e=api.coord([api.value(1),k]);const h=api.size([0,1])[1]*0.56;
+        return{type:'rect',shape:{x:s[0],y:s[1]-h/2,width:Math.max(1.5,e[0]-s[0]),height:h,r:3},style:{fill:cols[k]}};},encode:{x:[0,1],y:2},silent:true},
+    {name:'高點線',type:'line',xAxisIndex:1,yAxisIndex:1,data:[],markLine:{silent:true,symbol:'none',lineStyle:{color:c.crit,type:[4,4]},label:{show:false},data:[{xAxis:tp}]}}]};});
+function replay(){REP=replayData();render(getRec('cReplay'));const {rows,tp,name}=REP;
+  const order=rows.map((r,k)=>({...r,k})).filter(r=>r.first).sort((a,b)=>a.first-b.first);
+  $('firsts').innerHTML=rows.map((r,k)=>{const o=order.findIndex(x=>x.k===k);const rel=r.first?Math.round((r.first-tp)/DAY):null;
+    const atStart=r.first&&r.first<=REP.t0+5*DAY;
+    return `<div class="first"><div class="fo">${r.first?'第 '+(o+1)+' 個亮燈'+(atStart?' · 期初已亮':''):(r.has?'未亮燈':'無數據')}</div><div class="fn">${r.n}</div><div class="fd">${r.first?ymd(r.first):'—'}</div><div class="fx">${rel==null?r.f:(rel<0?'股市高點前 '+(-rel)+' 天':'股市高點後 '+rel+' 天')}</div></div>`;}).join('');
+  const before=order.filter(r=>r.first<tp).map(r=>r.n);
+  $('replayText').innerHTML=`<strong>${name}</strong>:亮燈順序為 ${order.map(r=>r.n).join(' → ')||'無'}。`+(before.length?`在股市高點之前就已亮燈的有:${before.join('、')}。`:'股市高點之前沒有指標亮燈,這次的下跌來得很突然。')+
+    (rows[4].has?'':' VIX3M 從 2007 年 12 月才有數據,所以這次 VIX 結構只能從那之後判讀。');
+  $('replayNote').textContent='紅色虛線 = 股市高點';}
+replay();
+
+/* ======================= DASHBOARD ======================= */
+function spark(data,col){if(!data.length)return'';const xs=data.map(d=>d[0]),ys=data.map(d=>d[1]);const x0=xs[0],x1=xs[xs.length-1],y0=Math.min(...ys),y1=Math.max(...ys);const W=200,H=44,p=3;
+  const X=x=>((x-x0)/(x1-x0||1))*(W-2*p)+p,Y=y=>H-p-((y-y0)/(y1-y0||1))*(H-2*p);let d='';data.forEach(([x,y],i)=>{d+=(i?'L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1);});
+  const lx=X(x1),ly=Y(ys[ys.length-1]);return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path d="${d} L${lx} ${H} L${p} ${H}Z" fill="${col}" opacity=".08"/><path d="${d}" fill="none" stroke="${col}" stroke-width="1.6" vector-effect="non-scaling-stroke"/><circle cx="${lx}" cy="${ly}" r="3" fill="${col}"/></svg>`;}
+function renderSparks(){const stc=['var(--good)','var(--warn)','var(--crit)'];
+  $('dash').innerHTML=ST.map(s=>`<a class="dcard link" href="#${s.id}" style="--stc:${stc[s.s]}"><div class="dl">${s.lv}</div><div class="dn">${s.nm}</div><div class="dv">${s.val}</div>${pill(s.s)}<div class="dr">${s.why}</div>${spark(s.spark,'var(--accent)')}<div class="dl">${ymd(s.date)}</div></a>`).join('');}
+renderSparks();
+(function verdict(){const w=ST.filter(s=>s.s===2),a=ST.filter(s=>s.s===1);let deepest=-1;ST.forEach((s,i)=>{if(s.s===2)deepest=i;});
+  let t=`五個指標中 <b>${w.length}</b> 個警示、<b>${a.length}</b> 個注意。`;
+  if(!w.length&&!a.length)t+='傳導鏈全部平靜,市場處於風險偏好的狀態。';
+  else{const up=ST.slice(0,3).filter(s=>s.s>0).length,down=ST.slice(3).filter(s=>s.s>0).length;
+    if(down&&!up)t+='目前的壓力集中在<strong>股市內部和恐慌層</strong>,上游的資金面與信用面相對平靜。這比較像「股市自身的修正」,而不是由資金緊縮或信用危機引起;歷史上這類情況通常恢復得較快,但仍要留意上游是否跟著亮燈。';
+    else if(up&&!down)t+='壓力出現在<strong>上游</strong>,股市本身還沒反應。這是傳導鏈最早期的樣子,值得持續追蹤信用利差與金絲雀。';
+    else if(ST[1].s===0)t+='上游的美元或金銀比有壓力,下游的股市內部與恐慌層也亮燈,但<strong>中間的信用利差仍然正常</strong>。債市還不擔心違約,代表這波壓力目前還沒有演變成信用問題。接下來最該盯的就是信用利差:如果它開始擴大,代表傳導鏈正式接上。';
+    else t+='上游與下游都有指標亮燈,而且信用利差也在擴大,代表壓力正在<strong>沿著整條傳導鏈擴散</strong>,是最需要謹慎的組合。';}
+  $('verdict').innerHTML=t;
+  $('nowLede').textContent='用同一套規則判讀最新數據(至 '+ymd(newest)+')。每張卡片的小圖是近一年走勢。';})();
+
+/* ======================= QUIZ ======================= */
+const QUIZ=[
+  {q:'2020 年 3 月股市暴跌時,黃金也跟著下跌了約 10 天。最主要的原因是?',o:['黃金從此失去避險功能','機構被追繳保證金,賣出流動性好的資產換美元','各國央行同時大量賣出黃金'],a:1,e:'這是「搶現金」:恐慌初期大家需要美元,連黃金也被賣。Fed 提供美元後,黃金率先反彈並創新高。'},
+  {q:'公債殖利率從 4% 升到 5%,同一家公司的公司債殖利率從 6% 升到 7%。信用利差怎麼變?',o:['擴大 1%','不變,還是 2%','縮小 1%'],a:1,e:'7% − 5% = 2%,和原本 6% − 4% 一樣。利差只在投資人要求更多違約補償時才會擴大。'},
+  {q:'金銀比在幾個月內從 60 升到 85,比較可能代表什麼?',o:['資金轉向避險,工業需求轉弱','市場熱錢充沛,投機盛行','白銀的工業需求大增'],a:0,e:'比值上升代表黃金相對強勢。資金退回避險資產,白銀的投機和工業需求同時降溫。'},
+  {q:'指數先漲 10%、再跌 9.09%,回到原點。3 倍槓桿 ETF 的結果最接近?',o:['也回到原點','虧損約 5.5%','獲利約 3%'],a:1,e:'1.30 × (1 − 0.2727) ≈ 0.945,虧損約 5.5%。這就是波動衰減:指數沒動,槓桿 ETF 卻變少了。'},
+  {q:'VIX ÷ VIX3M 剛升破 1 的那一天,最精確的解讀是?',o:['股市還沒跌,接下來準備要開始跌','市場已經在恐慌,正在搶買短期保護','長期風險比短期風險大'],a:1,e:'它是同步指標。翻轉時股市通常已經跌了一段,而且極端值常出現在底部附近。'}];
+let score={};try{score=JSON.parse(localStorage.getItem('macro-quiz')||'{}');}catch(e){}
+document.querySelectorAll('.quiz').forEach(box=>{const k=+box.dataset.q,Q=QUIZ[k];
+  box.innerHTML=`<div class="qh">小測驗 ${k+1} / 5</div><div class="qq">${Q.q}</div><div class="opts">${Q.o.map((o,i)=>`<button data-i="${i}"><span class="ol">${'ABC'[i]}</span><span>${o}</span></button>`).join('')}</div><div class="fb" aria-live="polite"></div>`;
+  const show=pick=>{box.querySelectorAll('.opts button').forEach((b,i)=>{b.disabled=true;if(i===Q.a)b.classList.add('right');else if(i===pick)b.classList.add('wrong');});
+    const done=Object.keys(score).length,right=Object.values(score).filter(Boolean).length;
+    box.querySelector('.fb').innerHTML=(pick===Q.a?'<strong class="pos">答對了。</strong>':'<strong class="neg">再想想。</strong>')+Q.e+` <span class="cap">(目前 ${right} / ${done} 題答對)</span> <button class="btn" style="margin-left:6px;padding:3px 10px">重做</button>`;
+    box.querySelector('.fb .btn').onclick=()=>{delete score[k];save();box.querySelectorAll('.opts button').forEach(b=>{b.disabled=false;b.className='';});box.querySelector('.fb').innerHTML='';};};
+  box.querySelector('.opts').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const i=+b.dataset.i;score[k]=i===Q.a;save();show(i);});
+  if(k in score)show(score[k]?Q.a:(Q.a+1)%3);});
+function save(){try{localStorage.setItem('macro-quiz',JSON.stringify(score));}catch(e){}if(typeof updateProgress==='function')updateProgress();}
+
+/* ======================= GLOSSARY ======================= */
+const GL={ma200:['200 日均線','最近 200 個交易日(約 10 個月)收盤價的平均。價格在它之上通常視為長期多頭,跌破代表長期趨勢可能轉弱。'],
+  bp:['基點 (bp)','0.01 個百分點。利差從 2.00% 擴大到 2.50%,就是擴大 50 個基點。'],
+  yield:['殖利率','買進債券並持有到期,每年可以拿到的報酬率。債券價格下跌,殖利率就上升。'],
+  real:['實質利率','名目利率扣掉通膨後的利率,代表真正增加的購買力。可用 TIPS 殖利率觀察。'],
+  opp:['機會成本(持有成本)','選擇 A 就放棄 B 的收益。持有不生息的黃金,就放棄了把錢放公債可以拿到的實質利息。'],
+  credit:['信用利差','公司債殖利率減去同天期公債殖利率,是投資人承擔違約風險要求的額外補償。'],
+  term:['期限利差','長天期公債減短天期公債殖利率,例如 10 年期減 2 年期。變成負值就是「殖利率曲線倒掛」。'],
+  iv:['隱含波動率','從選擇權價格反推出來的「市場預期未來波動」。選擇權越貴,隱含波動率越高。'],
+  contango:['正價差 / 逆價差','正價差:長天期比短天期貴,是正常狀態。逆價差:短天期比長天期貴,代表眼前的恐慌。'],
+  margin:['保證金追繳','用借來的錢投資,當資產跌價、擔保品不足時,券商要求補錢;補不出來就被強制賣出。'],
+  rebal:['每日再平衡','槓桿 ETF 每天收盤後調整部位,讓隔天仍維持固定倍數。這讓長期報酬受波動影響,產生衰減。'],
+  safe:['避險資產','市場恐慌時資金會流向的資產,例如美國公債、黃金、美元、日圓。']};
+$('gloss').innerHTML=Object.values(GL).map(([n,d])=>`<div class="gl"><dt>${n}</dt><dd>${d}</dd></div>`).join('');
+const pop=$('pop');
+function showPop(el){const g=GL[el.dataset.term];if(!g)return;pop.innerHTML='<b>'+g[0]+'</b>'+g[1];const r=el.getBoundingClientRect();pop.classList.add('show');
+  const w=pop.offsetWidth;let x=r.left+window.scrollX+r.width/2-w/2;x=Math.max(12,Math.min(x,document.documentElement.clientWidth-w-12));pop.style.left=x+'px';pop.style.top=(r.bottom+window.scrollY+8)+'px';}
+document.querySelectorAll('.term').forEach(el=>{el.addEventListener('mouseenter',()=>showPop(el));el.addEventListener('focus',()=>showPop(el));el.addEventListener('click',()=>showPop(el));
+  el.addEventListener('mouseleave',()=>pop.classList.remove('show'));el.addEventListener('blur',()=>pop.classList.remove('show'));});
+
+/* ======================= COURSE SHELL / ROUTER ======================= */
+const ROUTES=[
+  {r:'home',k:'⌂',t:'課程首頁',s:'總覽與學習路線',g:'開始'},
+  {r:'ch1',k:'01',t:'美元與實質利率',s:'第 1 層 · 資金面',g:'課程',q:0,st:0,min:12,d:'美元走強為什麼會壓縮全球資金?黃金在恐慌初期為什麼也會跌?'},
+  {r:'ch2',k:'02',t:'信用利差',s:'第 2 層 · 信用面',g:'課程',q:1,st:1,min:15,d:'升息不等於利差擴大。用一家公司的帳本,看借錢成本怎麼兩層疊加。'},
+  {r:'ch3',k:'03',t:'金銀比',s:'第 3 層 · 風險偏好',g:'課程',q:2,st:2,min:10,d:'黃金避險、白銀投機。兩者的比值透露資金正在冒險還是逃難。'},
+  {r:'ch4',k:'04',t:'槓桿 ETF 金絲雀',s:'第 4 層 · 股市內部',g:'課程',q:3,st:3,min:15,d:'波動衰減讓槓桿 ETF 比指數更早跌破 200 日線。自己跑模擬看看。'},
+  {r:'ch5',k:'05',t:'VIX 期限結構',s:'第 5 層 · 恐慌',g:'課程',q:4,st:4,min:12,d:'用保險費理解 VIX。短期保費比中期貴,代表市場正在恐慌。'},
+  {r:'replay',k:'▶',t:'危機回放',s:'把五層串起來',g:'實作',min:8,d:'把五個指標放在同一條時間軸上,重看 7 次歷史危機誰先亮燈。'},
+  {r:'now',k:'●',t:'目前狀態',s:'今天走到第幾層',g:'實作',min:3,d:'用同一套規則判讀最新數據,看看壓力目前傳到哪一層。'},
+  {r:'glossary',k:'字',t:'名詞小卡',s:'12 個關鍵名詞',g:'附錄',min:3}];
+const VIEWS={};document.querySelectorAll('.view').forEach(v=>VIEWS[v.dataset.route]=v);
+const tickHtml=R=>R.q==null?'':`<span class="tick ${R.q in score?'done':''}" data-tick="${R.q}" title="${R.q in score?'已完成':'未完成'}">✓</span>`;
+const dotHtml=R=>R.st==null?'':`<span class="dot s${ST[R.st].s}" title="目前${SL[ST[R.st].s]}"></span>`;
+// sidebar
+(function buildSide(){let h='',g='';ROUTES.forEach(R=>{if(R.g!==g){if(g)h+='</div>';g=R.g;h+=`<div class="nav-group"><div class="nav-label">${g}</div>`;}
+  h+=`<a class="nav-item" href="#${R.r}" data-r="${R.r}"><span class="nk" style="grid-row:1/span 2">${R.k}</span><span class="nt">${R.t}</span><span class="nd">${dotHtml(R)}${tickHtml(R)}</span><span class="ns">${R.s}</span></a>`;});
+  $('sideNav').innerHTML=h+'</div>';
+  $('sideFoot').innerHTML=`數據至 ${ymd(newest)}<br>燈號依教材示範規則判讀<br>僅供教育用途,非投資建議`;})();
+// home learning path
+$('path').innerHTML=ROUTES.filter(R=>R.d).map(R=>`<a class="step${R.r==='now'?' wide':''}" href="#${R.r}"><span class="sn">${R.k}</span><span class="sl">${R.s}</span><span class="st2">${R.t}</span><span class="sd">${R.d}</span><span class="sm">${R.st!=null?pill(ST[R.st].s):''}${tickHtml(R)}<span>約 ${R.min} 分鐘</span></span></a>`).join('');
+// crumbs, pagers, chapter TOCs
+ROUTES.forEach((R,i)=>{const v=VIEWS[R.r];if(!v)return;
+  if(R.r!=='home')v.insertAdjacentHTML('afterbegin',`<div class="crumb"><a href="#home">課程首頁</a><span>/</span><span>${R.g}</span><span>/</span><span>${R.t}</span><span class="meta">約 ${R.min} 分鐘 · 數據至 ${ymd(newest)}</span></div>`);
+  const pg=v.querySelector('.pager');if(pg){const P=ROUTES[i-1],N=ROUTES[i+1];
+    pg.innerHTML=(P?`<a class="prev" href="#${P.r}"><div class="pd">上一章</div><div class="pt"><span class="ar">←</span> ${P.t}</div></a>`:'')+(N?`<a class="next" href="#${N.r}"><div class="pd">下一章 · ${N.s}</div><div class="pt">${N.t} <span class="ar">→</span></div></a>`:'');}
+  const toc=v.querySelector('.ch-toc');if(toc){const targets=[...v.querySelectorAll('.part')].map(p=>[p,p.querySelector('.tag').textContent]);const qz=v.querySelector('.quiz');if(qz)targets.push([qz,'小測驗']);
+    toc.innerHTML='<div class="tl">本章目錄</div>'+targets.map((x,k)=>`<button data-k="${k}">${x[1]}</button>`).join('');toc._targets=targets.map(x=>x[0]);
+    toc.addEventListener('click',e=>{const b=e.target.closest('button');if(b)toc._targets[+b.dataset.k].scrollIntoView({behavior:'smooth',block:'start'});});}
+});
+function updateProgress(){const n=Object.keys(score).length;$('progTxt').textContent=n+' / 5';$('progBar').style.width=(n/5*100)+'%';
+  document.querySelectorAll('[data-tick]').forEach(t=>{const d=t.dataset.tick in score;t.classList.toggle('done',d);t.title=d?'已完成':'未完成';});}
+updateProgress();
+let CUR='home';
+function route(){let r=(location.hash||'').slice(1);if(!VIEWS[r]){const el=r&&document.getElementById(r);const host=el&&el.closest('.view');r=host?host.dataset.route:'home';}
+  const changed=r!==CUR||!route.done;route.done=true;CUR=r;
+  Object.entries(VIEWS).forEach(([k,v])=>{v.hidden=k!==r;});
+  document.querySelectorAll('.nav-item').forEach(a=>a.classList.toggle('on',a.dataset.r===r));
+  const R=ROUTES.find(x=>x.r===r);$('where').textContent=R?(R.k!=='⌂'?R.k+' '+R.t:R.t):'';
+  $('app').classList.remove('nav-open');
+  if(changed)window.scrollTo(0,0);
+  charts.forEach(rec=>{if(VIEWS[r].contains(rec.el)){if(rec.dirty||!rec.chart)render(rec);else rec.chart.resize();}});
+  onScroll();}
+function onScroll(){const h=document.documentElement.scrollHeight-window.innerHeight;$('pagebar').style.width=(h>0?Math.min(100,window.scrollY/h*100):0)+'%';
+  const toc=VIEWS[CUR]&&VIEWS[CUR].querySelector('.ch-toc');if(!toc||!toc._targets)return;let k=0;toc._targets.forEach((el,i)=>{if(el.getBoundingClientRect().top<160)k=i;});
+  toc.querySelectorAll('button').forEach((b,i)=>b.classList.toggle('on',i===k));}
+let tick=false;window.addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(()=>{onScroll();tick=false;});}},{passive:true});
+window.addEventListener('hashchange',route);
+$('menuBtn').addEventListener('click',()=>$('app').classList.add('nav-open'));
+$('scrim').addEventListener('click',()=>$('app').classList.remove('nav-open'));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('app').classList.remove('nav-open');});
+route();
+
+/* theme changes */
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',rerenderAll);
+new MutationObserver(rerenderAll).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+})();
+</script>
