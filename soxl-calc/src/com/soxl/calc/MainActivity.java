@@ -111,7 +111,6 @@ public class MainActivity extends Activity {
     private void show(TextView price, TextView chg, double prev, double leverage, double r) {
         if (Double.isNaN(r) || !(prev > 0)) {
             price.setText("—");
-            price.setTextColor(0xFFFFFFFF);
             chg.setText("");
             return;
         }
@@ -119,7 +118,6 @@ public class MainActivity extends Activity {
         double v = prev * (1 + lr);
         int color = r > 0 ? getColor(R.color.heroUp) : r < 0 ? getColor(R.color.heroDown) : 0xFFFFFFFF;
         price.setText(money(v));
-        price.setTextColor(color);
         chg.setText(String.format(Locale.US, "%+.2f%%  %+.2f", lr * 100, v - prev));
         chg.setTextColor(color);
     }

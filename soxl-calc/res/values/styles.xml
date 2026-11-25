@@ -8,8 +8,9 @@
     <color name="up">#D92D20</color>
     <color name="down">#12883F</color>
     <color name="field">#EDF0F5</color>
-    <color name="hero">#121A2B</color>
-    <color name="heroSub">#A9B4C6</color>
+    <color name="soxl">#FFC069</color>
+    <color name="usd">#8CC8FF</color>
+    <color name="heroSub">#C3CBD8</color>
     <color name="heroUp">#FF7A6E</color>
     <color name="heroDown">#4ADE80</color>
     <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
