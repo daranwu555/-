@@ -1,3 +1,5 @@
 .claude/
 __pycache__/
 *.pyc
+soxl-calc/build/
+soxl-calc/keystore.jks

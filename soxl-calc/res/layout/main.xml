@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:fitsSystemWindows="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SOXL 價格推算" android:textSize="26sp" android:textStyle="bold" android:textColor="@color/text" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="依 SOXX 當日漲跌幅 × 槓桿倍數推算" android:textSize="14sp" android:textColor="@color/sub" android:layout_marginTop="4dp" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/card" android:padding="18dp" android:layout_marginTop="18dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="昨日收盤" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/text" />
+            <TextView style="@style/Label" android:layout_marginTop="10dp" android:text="SOXX 昨日收盤價" />
+            <EditText android:id="@+id/soxxPrev" style="@style/Input" android:hint="例如 250.00" android:imeOptions="actionNext" />
+            <TextView style="@style/Label" android:text="SOXL 昨日收盤價" />
+            <EditText android:id="@+id/soxlPrev" style="@style/Input" android:hint="例如 30.00" android:imeOptions="actionNext" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/card" android:padding="18dp" android:layout_marginTop="14dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="今日預估" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/text" />
+            <TextView style="@style/Label" android:layout_marginTop="10dp" android:text="SOXX 今日預估價" />
+            <EditText android:id="@+id/soxxEst" style="@style/Input" android:hint="輸入你的預估價" android:imeOptions="actionDone" />
+            <TextView style="@style/Label" android:text="槓桿倍數" />
+            <EditText android:id="@+id/leverage" style="@style/Input" android:text="3" android:imeOptions="actionDone" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/card" android:padding="18dp" android:layout_marginTop="14dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SOXL 推算價格" android:textSize="14sp" android:textColor="@color/sub" />
+            <TextView android:id="@+id/result" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="—" android:textSize="44sp" android:textStyle="bold" android:textColor="@color/text" android:layout_marginTop="2dp" />
+            <TextView android:id="@+id/soxlChg" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="SOXL 漲跌：—" android:textSize="16sp" android:textColor="@color/sub" android:layout_marginTop="6dp" />
+            <TextView android:id="@+id/soxxChg" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="SOXX 漲跌：—" android:textSize="16sp" android:textColor="@color/sub" android:layout_marginTop="4dp" />
+        </LinearLayout>
+        <Button android:id="@+id/clear" android:layout_width="match_parent" android:layout_height="52dp" android:text="清除今日預估價" android:layout_marginTop="16dp" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="公式：SOXL 推算價 = SOXL 昨收 ×（1 + 槓桿 × SOXX 漲跌幅）。昨收價會自動記住。實際價格會因追蹤誤差、費用與盤中供需而略有偏差，僅供參考。" android:textSize="12sp" android:textColor="@color/sub" android:layout_marginTop="14dp" android:lineSpacingExtra="3dp" />
+    </LinearLayout>
+</ScrollView>

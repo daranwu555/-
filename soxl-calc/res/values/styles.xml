@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg">#F4F6FA</color>
+    <color name="card">#FFFFFF</color>
+    <color name="text">#14181F</color>
+    <color name="sub">#5B6472</color>
+    <color name="accent">#1F6FEB</color>
+    <color name="up">#D92D20</color>
+    <color name="down">#12883F</color>
+    <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:statusBarColor">@color/bg</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:textColorPrimary">@color/text</item>
+    </style>
+    <style name="Label">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/sub</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginTop">14dp</item>
+    </style>
+    <style name="Input">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">numberDecimal</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textColorHint">#9AA3B0</item>
+        <item name="android:singleLine">true</item>
+    </style>
+</resources>
