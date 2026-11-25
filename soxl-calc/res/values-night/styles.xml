@@ -7,6 +7,8 @@
     <color name="accent">#5B9BFF</color>
     <color name="up">#FF6B5E</color>
     <color name="down">#3FCB76</color>
+    <color name="field">#262D38</color>
+    <color name="hero">#1B2333</color>
     <style name="AppTheme" parent="android:Theme.Material.NoActionBar">
         <item name="android:colorAccent">@color/accent</item>
         <item name="android:windowBackground">@color/bg</item>
