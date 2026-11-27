@@ -21,12 +21,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MainActivity extends Activity {
-    private static final String SCAN_URL = "https://scanner.tradingview.com/america/scan";
-    private static final String SCAN_BODY = "{\"symbols\":{\"tickers\":[\"NASDAQ:SOXX\",\"AMEX:SOXL\",\"AMEX:USD\",\"DJ:DJUSSC\"]},\"columns\":[\"close\",\"close[1]\",\"current_session\",\"time\",\"premarket_close\",\"postmarket_close\"]}";
-    private static final String[] KEYS = {"soxxPrev", "soxlPrev", "djPrev", "usdPrev", "soxxEst", "djEst"};
-    private EditText soxxPrev, soxlPrev, djPrev, usdPrev, soxxEst, djEst;
+    private static final String SCAN_URL = "https://scanner.tradingview.com/global/scan";
+    private static final String SCAN_BODY = "{\"symbols\":{\"tickers\":[\"NASDAQ:SOXX\",\"AMEX:SOXL\",\"AMEX:USD\",\"DJ:DJUSSC\",\"FX_IDC:USDTWD\"]},\"columns\":[\"close\",\"close[1]\",\"current_session\",\"time\",\"premarket_close\",\"postmarket_close\"]}";
+    private static final String[] KEYS = {"soxxPrev", "soxlPrev", "djPrev", "usdPrev", "soxxEst", "djEst", "amount"};
+    private EditText soxxPrev, soxlPrev, djPrev, usdPrev, soxxEst, djEst, amount, rate;
     private EditText[] fields;
-    private TextView result, soxlChg, resultUsd, usdChg, resultUsdSoxx, usdSoxxChg, hint, soxxChg, djChg, status, soxxLive, djLive;
+    private TextView result, soxlChg, resultUsd, usdChg, resultUsdSoxx, usdSoxxChg, hint, soxxChg, djChg, status, soxxLive, djLive, soxlShares, usdSoxxShares, usdShares, curTwd, curUsd, rateInfo;
+    private View rateRow;
+    private boolean twd, rateManual, settingRate;
     private SharedPreferences prefs;
     private boolean fetching;
 
@@ -41,7 +43,16 @@ public class MainActivity extends Activity {
         usdPrev = findViewById(R.id.usdPrev);
         soxxEst = findViewById(R.id.soxxEst);
         djEst = findViewById(R.id.djEst);
-        fields = new EditText[] {soxxPrev, soxlPrev, djPrev, usdPrev, soxxEst, djEst};
+        amount = findViewById(R.id.amount);
+        rate = findViewById(R.id.rate);
+        rateRow = findViewById(R.id.rateRow);
+        rateInfo = findViewById(R.id.rateInfo);
+        curTwd = findViewById(R.id.curTwd);
+        curUsd = findViewById(R.id.curUsd);
+        soxlShares = findViewById(R.id.soxlShares);
+        usdSoxxShares = findViewById(R.id.usdSoxxShares);
+        usdShares = findViewById(R.id.usdShares);
+        fields = new EditText[] {soxxPrev, soxlPrev, djPrev, usdPrev, soxxEst, djEst, amount};
         result = findViewById(R.id.result);
         soxlChg = findViewById(R.id.soxlChg);
         resultUsd = findViewById(R.id.resultUsd);
@@ -63,7 +74,22 @@ public class MainActivity extends Activity {
             if (state == null) fields[i].setText(prefs.getString(KEYS[i], ""));
             fields[i].addTextChangedListener(w);
         }
-        findViewById(R.id.refresh).setOnClickListener(v -> fetch());
+        twd = state == null ? prefs.getBoolean("twd", true) : state.getBoolean("twd", true);
+        rateManual = prefs.getBoolean("rateManual", false);
+        if (state == null) setRate(prefs.getString("rate", ""));
+        rate.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
+            public void onTextChanged(CharSequence s, int a, int b, int c) {}
+            public void afterTextChanged(Editable e) {
+                if (!settingRate && rate.hasFocus()) { rateManual = true; rateInfo.setText("台幣（自訂）"); }
+                calc();
+            }
+        });
+        if (rateManual) rateInfo.setText("台幣（自訂）");
+        curTwd.setOnClickListener(v -> setCurrency(true));
+        curUsd.setOnClickListener(v -> setCurrency(false));
+        setCurrency(twd);
+        findViewById(R.id.refresh).setOnClickListener(v -> { rateManual = false; fetch(); });
         findViewById(R.id.soxxMinus).setOnClickListener(v -> step(soxxPrev, soxxEst, -0.005));
         findViewById(R.id.soxxPlus).setOnClickListener(v -> step(soxxPrev, soxxEst, 0.005));
         findViewById(R.id.djMinus).setOnClickListener(v -> step(djPrev, djEst, -0.005));
@@ -77,7 +103,39 @@ public class MainActivity extends Activity {
         super.onPause();
         SharedPreferences.Editor e = prefs.edit();
         for (int i = 0; i < fields.length; i++) e.putString(KEYS[i], fields[i].getText().toString());
+        e.putString("rate", rate.getText().toString()).putBoolean("twd", twd).putBoolean("rateManual", rateManual);
         e.apply();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle out) {
+        super.onSaveInstanceState(out);
+        out.putBoolean("twd", twd);
+    }
+
+    private void setRate(String v) {
+        settingRate = true;
+        rate.setText(v);
+        settingRate = false;
+    }
+
+    private void setCurrency(boolean useTwd) {
+        twd = useTwd;
+        curTwd.setBackgroundResource(twd ? R.drawable.chip_on : R.drawable.chip);
+        curTwd.setTextColor(twd ? 0xFFFFFFFF : getColor(R.color.text));
+        curUsd.setBackgroundResource(twd ? R.drawable.chip : R.drawable.chip_on);
+        curUsd.setTextColor(twd ? getColor(R.color.text) : 0xFFFFFFFF);
+        rateRow.setVisibility(twd ? View.VISIBLE : View.GONE);
+        calc();
+    }
+
+    /** 可用的美金預算；金額或匯率未填時為 NaN。 */
+    private double budgetUsd() {
+        double a = num(amount);
+        if (!(a > 0)) return Double.NaN;
+        if (!twd) return a;
+        double r = num(rate);
+        return r > 0 ? a / r : Double.NaN;
     }
 
     private static double num(EditText e) {
@@ -102,9 +160,10 @@ public class MainActivity extends Activity {
     private void calc() {
         double rSoxx = change(soxxPrev, soxxEst, soxxChg);
         double rDj = change(djPrev, djEst, djChg);
-        show(result, soxlChg, num(soxlPrev), 3, rSoxx);
-        show(resultUsdSoxx, usdSoxxChg, num(usdPrev), 2, rSoxx);
-        show(resultUsd, usdChg, num(usdPrev), 2, rDj);
+        double budget = budgetUsd();
+        show(result, soxlChg, soxlShares, num(soxlPrev), 3, rSoxx, budget);
+        show(resultUsdSoxx, usdSoxxChg, usdSoxxShares, num(usdPrev), 2, rSoxx, budget);
+        show(resultUsd, usdChg, usdShares, num(usdPrev), 2, rDj, budget);
         hint.setVisibility(Double.isNaN(rSoxx) && Double.isNaN(rDj) ? View.VISIBLE : View.GONE);
     }
 
@@ -116,10 +175,11 @@ public class MainActivity extends Activity {
         return r;
     }
 
-    private void show(TextView price, TextView chg, double prev, double leverage, double r) {
+    private void show(TextView price, TextView chg, TextView shares, double prev, double leverage, double r, double budget) {
         if (Double.isNaN(r) || !(prev > 0)) {
             price.setText("—");
             chg.setText("");
+            shares.setText("");
             return;
         }
         double lr = Math.max(leverage * r, -1);
@@ -127,6 +187,7 @@ public class MainActivity extends Activity {
         price.setText(money(v));
         chg.setText(String.format(Locale.US, "%+.2f%%  %+.2f", lr * 100, v - prev));
         chg.setTextColor(r > 0 ? getColor(R.color.heroUp) : r < 0 ? getColor(R.color.heroDown) : 0xFFFFFFFF);
+        shares.setText(budget > 0 && v > 0 ? String.format(Locale.US, "可買 %,d 股", (long) Math.floor(budget / v)) : "");
     }
 
     /** 開盤中取前一根日線收盤，其餘時段取最近一根日線收盤。 */
@@ -167,7 +228,7 @@ public class MainActivity extends Activity {
                     while ((n = in.read(chunk)) > 0) buf.write(chunk, 0, n);
                 }
                 JSONArray data = new JSONObject(buf.toString("UTF-8")).getJSONArray("data");
-                JSONArray soxx = null, soxl = null, usd = null, dj = null;
+                JSONArray soxx = null, soxl = null, usd = null, dj = null, fx = null;
                 for (int i = 0; i < data.length(); i++) {
                     JSONObject row = data.getJSONObject(i);
                     String s = row.getString("s");
@@ -175,9 +236,11 @@ public class MainActivity extends Activity {
                     if (s.endsWith(":SOXL")) soxl = row.getJSONArray("d");
                     if (s.endsWith(":USD")) usd = row.getJSONArray("d");
                     if (s.endsWith(":DJUSSC")) dj = row.getJSONArray("d");
+                    if (s.endsWith(":USDTWD")) fx = row.getJSONArray("d");
                 }
                 if (soxx == null || soxl == null || usd == null || dj == null) throw new Exception("missing symbol");
                 double[] bases = {base(soxx), base(soxl), base(dj), base(usd)};
+                double fxRate = fx == null ? Double.NaN : fx.optDouble(0);
                 double soxxNow = live(soxx), djNow = live(dj);
                 String soxxNowLabel = liveLabel(soxx), djNowLabel = liveLabel(dj);
                 String when;
@@ -196,6 +259,7 @@ public class MainActivity extends Activity {
                     usdPrev.setText(money(bases[3]));
                     applyLive(soxxLive, soxxEst, "SOXX " + soxxNowLabel, soxxNow);
                     applyLive(djLive, djEst, "指數" + djNowLabel, djNow);
+                    if (fxRate > 0 && !rateManual) { setRate(String.format(Locale.US, "%.3f", fxRate)); rateInfo.setText("台幣（最新匯率）"); calc(); }
                     status.setText("TradingView · " + when + " · 延遲約 15 分");
                 });
             } catch (Exception e) {
