@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
     private static final String[] KEYS = {"soxxPrev", "soxlPrev", "djPrev", "usdPrev", "soxxEst", "djEst"};
     private EditText soxxPrev, soxlPrev, djPrev, usdPrev, soxxEst, djEst;
     private EditText[] fields;
-    private TextView result, soxlChg, resultUsd, usdChg, hint, soxxChg, djChg, status, soxxLive, djLive;
+    private TextView result, soxlChg, resultUsd, usdChg, resultUsdSoxx, usdSoxxChg, hint, soxxChg, djChg, status, soxxLive, djLive;
     private SharedPreferences prefs;
     private boolean fetching;
 
@@ -46,6 +46,8 @@ public class MainActivity extends Activity {
         soxlChg = findViewById(R.id.soxlChg);
         resultUsd = findViewById(R.id.resultUsd);
         usdChg = findViewById(R.id.usdChg);
+        resultUsdSoxx = findViewById(R.id.resultUsdSoxx);
+        usdSoxxChg = findViewById(R.id.usdSoxxChg);
         hint = findViewById(R.id.hint);
         soxxChg = findViewById(R.id.soxxChg);
         djChg = findViewById(R.id.djChg);
@@ -101,6 +103,7 @@ public class MainActivity extends Activity {
         double rSoxx = change(soxxPrev, soxxEst, soxxChg);
         double rDj = change(djPrev, djEst, djChg);
         show(result, soxlChg, num(soxlPrev), 3, rSoxx);
+        show(resultUsdSoxx, usdSoxxChg, num(usdPrev), 2, rSoxx);
         show(resultUsd, usdChg, num(usdPrev), 2, rDj);
         hint.setVisibility(Double.isNaN(rSoxx) && Double.isNaN(rDj) ? View.VISIBLE : View.GONE);
     }

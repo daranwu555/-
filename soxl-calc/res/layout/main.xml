@@ -8,22 +8,32 @@
             </LinearLayout>
             <TextView android:id="@+id/refresh" android:layout_width="wrap_content" android:layout_height="40dp" android:gravity="center" android:paddingLeft="16dp" android:paddingRight="16dp" android:text="↻ 更新" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/accent" android:background="@drawable/chip" android:clickable="true" android:focusable="true" />
         </LinearLayout>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="12dp" android:baselineAligned="false">
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:background="@drawable/hero_soxl" android:padding="14dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:background="@drawable/hero_soxl" android:padding="14dp" android:layout_marginTop="12dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/badge_soxl" android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="3dp" android:paddingBottom="3dp" android:text="SOXL · 3倍" android:textSize="14sp" android:textStyle="bold" android:textColor="#10141C" />
-                <TextView android:id="@+id/result" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="—" android:textSize="34sp" android:textStyle="bold" android:textColor="@color/soxl" android:singleLine="true" />
-                <TextView android:id="@+id/soxlChg" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/heroSub" android:singleLine="true" />
+                <TextView android:id="@+id/soxlChg" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/heroSub" android:singleLine="true" />
             </LinearLayout>
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginLeft="10dp" android:orientation="vertical" android:background="@drawable/hero_usd" android:padding="14dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/badge_usd" android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="3dp" android:paddingBottom="3dp" android:text="USD · 2倍" android:textSize="14sp" android:textStyle="bold" android:textColor="#10141C" />
-                <TextView android:id="@+id/resultUsd" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="—" android:textSize="34sp" android:textStyle="bold" android:textColor="@color/usd" android:singleLine="true" />
-                <TextView android:id="@+id/usdChg" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/heroSub" android:singleLine="true" />
+            <TextView android:id="@+id/result" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="—" android:textSize="40sp" android:textStyle="bold" android:textColor="@color/soxl" android:singleLine="true" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/hero_usd" android:padding="14dp" android:layout_marginTop="10dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/badge_usd" android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="3dp" android:paddingBottom="3dp" android:text="USD · 2倍" android:textSize="14sp" android:textStyle="bold" android:textColor="#10141C" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:baselineAligned="false">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="以 SOXX 推算" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/heroSub" />
+                    <TextView android:id="@+id/resultUsdSoxx" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="—" android:textSize="32sp" android:textStyle="bold" android:textColor="@color/usd" android:singleLine="true" />
+                    <TextView android:id="@+id/usdSoxxChg" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/heroSub" android:singleLine="true" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginLeft="12dp" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="以道瓊指數推算" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/heroSub" />
+                    <TextView android:id="@+id/resultUsd" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="—" android:textSize="32sp" android:textStyle="bold" android:textColor="@color/usd" android:singleLine="true" />
+                    <TextView android:id="@+id/usdChg" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/heroSub" android:singleLine="true" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
         <TextView android:id="@+id/hint" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="輸入預估價開始推算" android:textSize="14sp" android:textColor="@color/sub" android:layout_marginTop="8dp" />
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/card" android:padding="12dp" android:layout_marginTop="12dp">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/badge_soxl" android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="3dp" android:paddingBottom="3dp" android:text="SOXX 預估價 → SOXL" android:textSize="13sp" android:textStyle="bold" android:textColor="#10141C" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/badge_soxl" android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="3dp" android:paddingBottom="3dp" android:text="SOXX 預估價 → SOXL、USD" android:textSize="13sp" android:textStyle="bold" android:textColor="#10141C" />
                 <TextView android:id="@+id/soxxChg" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="right" android:text="" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/sub" />
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:gravity="center_vertical">
@@ -68,6 +78,6 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="推算價 = 昨收 ×（1 + 倍數 × 漲跌幅），為理論值。SOXL 以 SOXX 推算，USD 以道瓊美國半導體指數（DJUSSC）推算。" android:textSize="12sp" android:textColor="@color/sub" android:layout_marginTop="12dp" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="推算價 = 昨收 ×（1 + 倍數 × 漲跌幅），為理論值。USD 實際追蹤道瓊美國半導體指數（DJUSSC），以 SOXX 推算的 USD 誤差較大。" android:textSize="12sp" android:textColor="@color/sub" android:layout_marginTop="12dp" />
     </LinearLayout>
 </ScrollView>
