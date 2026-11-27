@@ -2,6 +2,7 @@ package com.soxl.calc;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -81,11 +82,11 @@ public class MainActivity extends Activity {
             public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
             public void onTextChanged(CharSequence s, int a, int b, int c) {}
             public void afterTextChanged(Editable e) {
-                if (!settingRate && rate.hasFocus()) { rateManual = true; rateInfo.setText("台幣（自訂）"); }
+                if (!settingRate && rate.hasFocus()) { rateManual = true; rateInfo.setText("自訂 · 1 美金兌台幣"); }
                 calc();
             }
         });
-        if (rateManual) rateInfo.setText("台幣（自訂）");
+        if (rateManual) rateInfo.setText("自訂 · 1 美金兌台幣");
         curTwd.setOnClickListener(v -> setCurrency(true));
         curUsd.setOnClickListener(v -> setCurrency(false));
         setCurrency(twd);
@@ -121,10 +122,8 @@ public class MainActivity extends Activity {
 
     private void setCurrency(boolean useTwd) {
         twd = useTwd;
-        curTwd.setBackgroundResource(twd ? R.drawable.chip_on : R.drawable.chip);
-        curTwd.setTextColor(twd ? 0xFFFFFFFF : getColor(R.color.text));
-        curUsd.setBackgroundResource(twd ? R.drawable.chip : R.drawable.chip_on);
-        curUsd.setTextColor(twd ? getColor(R.color.text) : 0xFFFFFFFF);
+        curTwd.setBackgroundResource(twd ? R.drawable.seg_on : 0);
+        curUsd.setBackgroundResource(twd ? 0 : R.drawable.seg_on);
         rateRow.setVisibility(twd ? View.VISIBLE : View.GONE);
         calc();
     }
@@ -170,23 +169,24 @@ public class MainActivity extends Activity {
     private double change(EditText prev, EditText est, TextView label) {
         double a = num(prev), c = num(est);
         double r = a > 0 && c > 0 ? c / a - 1 : Double.NaN;
-        label.setText(Double.isNaN(r) ? "" : String.format(Locale.US, "%+.2f%%", r * 100));
+        label.setText(Double.isNaN(r) ? "預估價" : String.format(Locale.US, "%+.2f%%", r * 100));
         label.setTextColor(r > 0 ? getColor(R.color.up) : r < 0 ? getColor(R.color.down) : getColor(R.color.sub));
         return r;
     }
 
-    private void show(TextView price, TextView chg, TextView shares, double prev, double leverage, double r, double budget) {
+    private void show(TextView price, TextView pill, TextView shares, double prev, double leverage, double r, double budget) {
         if (Double.isNaN(r) || !(prev > 0)) {
             price.setText("—");
-            chg.setText("");
+            pill.setVisibility(View.INVISIBLE);
             shares.setText("");
             return;
         }
         double lr = Math.max(leverage * r, -1);
         double v = prev * (1 + lr);
         price.setText(money(v));
-        chg.setText(String.format(Locale.US, "%+.2f%%  %+.2f", lr * 100, v - prev));
-        chg.setTextColor(r > 0 ? getColor(R.color.heroUp) : r < 0 ? getColor(R.color.heroDown) : 0xFFFFFFFF);
+        pill.setText(String.format(Locale.US, "%+.2f%%  %+.2f", lr * 100, v - prev));
+        pill.setBackgroundTintList(ColorStateList.valueOf(getColor(r > 0 ? R.color.up : r < 0 ? R.color.down : R.color.flat)));
+        pill.setVisibility(View.VISIBLE);
         shares.setText(budget > 0 && v > 0 ? String.format(Locale.US, "可買 %,d 股", (long) Math.floor(budget / v)) : "");
     }
 
@@ -259,7 +259,7 @@ public class MainActivity extends Activity {
                     usdPrev.setText(money(bases[3]));
                     applyLive(soxxLive, soxxEst, "SOXX " + soxxNowLabel, soxxNow);
                     applyLive(djLive, djEst, "指數" + djNowLabel, djNow);
-                    if (fxRate > 0 && !rateManual) { setRate(String.format(Locale.US, "%.3f", fxRate)); rateInfo.setText("台幣（最新匯率）"); calc(); }
+                    if (fxRate > 0 && !rateManual) { setRate(String.format(Locale.US, "%.3f", fxRate)); rateInfo.setText("最新 · 1 美金兌台幣"); calc(); }
                     status.setText("TradingView · " + when + " · 延遲約 15 分");
                 });
             } catch (Exception e) {

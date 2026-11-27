@@ -1,23 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg">#F4F6FA</color>
+    <color name="bg">#F2F2F7</color>
     <color name="card">#FFFFFF</color>
-    <color name="text">#14181F</color>
-    <color name="sub">#5B6472</color>
-    <color name="accent">#1F6FEB</color>
-    <color name="up">#D92D20</color>
-    <color name="down">#12883F</color>
-    <color name="field">#EDF0F5</color>
-    <color name="soxl">#FFC069</color>
-    <color name="usd">#8CC8FF</color>
-    <color name="heroSub">#C3CBD8</color>
-    <color name="heroUp">#FF7A6E</color>
-    <color name="heroDown">#4ADE80</color>
+    <color name="text">#000000</color>
+    <color name="sub">#8A8A8E</color>
+    <color name="hint">#C4C4C7</color>
+    <color name="separator">#D1D1D6</color>
+    <color name="fill">#E9E9EE</color>
+    <color name="segOn">#FFFFFF</color>
+    <color name="accent">#007AFF</color>
+    <color name="up">#FF3B30</color>
+    <color name="down">#34C759</color>
+    <color name="flat">#8E8E93</color>
+    <color name="soxl">#F08A00</color>
+    <color name="usd">#007AFF</color>
     <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:colorAccent">@color/accent</item>
         <item name="android:windowBackground">@color/bg</item>
         <item name="android:statusBarColor">@color/bg</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:textColorPrimary">@color/text</item>
+    </style>
+    <style name="SectionHeader">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">26dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/sub</item>
+    </style>
+    <style name="Row">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">12dp</item>
+    </style>
+    <style name="RowLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/text</item>
+    </style>
+    <style name="RowSub">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/sub</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+    </style>
+    <style name="RowValue">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@null</item>
+        <item name="android:gravity">right|center_vertical</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:inputType">numberDecimal</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textColorHint">@color/hint</item>
+    </style>
+    <style name="Sep">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:background">@color/separator</item>
+    </style>
+    <style name="Price">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+    <style name="Pill">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/pill</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+    <style name="Shares">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+        <item name="android:textColor">@color/sub</item>
+    </style>
+    <style name="Seg">
+        <item name="android:layout_height">32dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 </resources>

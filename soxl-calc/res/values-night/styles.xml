@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg">#0E1116</color>
-    <color name="card">#1A1F27</color>
-    <color name="text">#F0F3F7</color>
-    <color name="sub">#9AA3B0</color>
-    <color name="accent">#5B9BFF</color>
-    <color name="up">#FF6B5E</color>
-    <color name="down">#3FCB76</color>
-    <color name="field">#262D38</color>
+    <color name="bg">#000000</color>
+    <color name="card">#1C1C1E</color>
+    <color name="text">#FFFFFF</color>
+    <color name="sub">#98989F</color>
+    <color name="hint">#5A5A5F</color>
+    <color name="separator">#38383A</color>
+    <color name="fill">#2C2C2E</color>
+    <color name="segOn">#636366</color>
+    <color name="accent">#0A84FF</color>
+    <color name="up">#FF453A</color>
+    <color name="down">#30D158</color>
+    <color name="flat">#636366</color>
+    <color name="soxl">#FF9F0A</color>
+    <color name="usd">#4DA2FF</color>
     <style name="AppTheme" parent="android:Theme.Material.NoActionBar">
         <item name="android:colorAccent">@color/accent</item>
         <item name="android:windowBackground">@color/bg</item>
         <item name="android:statusBarColor">@color/bg</item>
+        <item name="android:navigationBarColor">@color/bg</item>
         <item name="android:textColorPrimary">@color/text</item>
     </style>
 </resources>

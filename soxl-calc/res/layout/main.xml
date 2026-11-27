@@ -1,99 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:fitsSystemWindows="true">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingLeft="16dp" android:paddingRight="16dp" android:paddingTop="12dp" android:paddingBottom="16dp">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:fitsSystemWindows="true" android:scrollbars="none">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingLeft="16dp" android:paddingRight="16dp" android:paddingTop="14dp" android:paddingBottom="28dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="bottom" android:paddingLeft="4dp">
             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SOXL / USD 推算" android:textSize="22sp" android:textStyle="bold" android:textColor="@color/text" />
-                <TextView android:id="@+id/status" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TradingView 報價" android:textSize="12sp" android:textColor="@color/sub" android:layout_marginTop="2dp" />
+                <TextView android:id="@+id/status" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TradingView 報價" android:textSize="13sp" android:fontFamily="sans-serif-medium" android:textColor="@color/sub" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="半導體槓桿" android:textSize="32sp" android:textStyle="bold" android:textColor="@color/text" android:includeFontPadding="false" android:layout_marginTop="4dp" />
             </LinearLayout>
-            <TextView android:id="@+id/refresh" android:layout_width="wrap_content" android:layout_height="40dp" android:gravity="center" android:paddingLeft="16dp" android:paddingRight="16dp" android:text="↻ 更新" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/accent" android:background="@drawable/chip" android:clickable="true" android:focusable="true" />
+            <ImageView android:id="@+id/refresh" android:layout_width="38dp" android:layout_height="38dp" android:padding="8dp" android:src="@drawable/ic_refresh" android:tint="@color/accent" android:background="@drawable/round" android:clickable="true" android:focusable="true" android:contentDescription="更新報價" />
         </LinearLayout>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:background="@drawable/hero_soxl" android:padding="14dp" android:layout_marginTop="12dp">
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/badge_soxl" android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="3dp" android:paddingBottom="3dp" android:text="SOXL · 3倍" android:textSize="14sp" android:textStyle="bold" android:textColor="#10141C" />
-                <TextView android:id="@+id/soxlChg" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/heroSub" android:singleLine="true" />
-                <TextView android:id="@+id/soxlShares" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="" android:textSize="15sp" android:textStyle="bold" android:textColor="#FFFFFF" android:singleLine="true" />
-            </LinearLayout>
-            <TextView android:id="@+id/result" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="—" android:textSize="40sp" android:textStyle="bold" android:textColor="@color/soxl" android:singleLine="true" />
-        </LinearLayout>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/hero_usd" android:padding="14dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/badge_usd" android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="3dp" android:paddingBottom="3dp" android:text="USD · 2倍" android:textSize="14sp" android:textStyle="bold" android:textColor="#10141C" />
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:baselineAligned="false">
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="以 SOXX 推算" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/heroSub" />
-                    <TextView android:id="@+id/resultUsdSoxx" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="—" android:textSize="32sp" android:textStyle="bold" android:textColor="@color/usd" android:singleLine="true" />
-                    <TextView android:id="@+id/usdSoxxChg" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/heroSub" android:singleLine="true" />
-                    <TextView android:id="@+id/usdSoxxShares" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="" android:textSize="15sp" android:textStyle="bold" android:textColor="#FFFFFF" android:singleLine="true" />
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginLeft="12dp" android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="以道瓊指數推算" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/heroSub" />
-                    <TextView android:id="@+id/resultUsd" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="—" android:textSize="32sp" android:textStyle="bold" android:textColor="@color/usd" android:singleLine="true" />
-                    <TextView android:id="@+id/usdChg" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/heroSub" android:singleLine="true" />
-                    <TextView android:id="@+id/usdShares" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="" android:textSize="15sp" android:textStyle="bold" android:textColor="#FFFFFF" android:singleLine="true" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-        <TextView android:id="@+id/hint" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="輸入預估價開始推算" android:textSize="14sp" android:textColor="@color/sub" android:layout_marginTop="8dp" />
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/card" android:padding="12dp" android:layout_marginTop="12dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/card" android:paddingLeft="18dp" android:paddingRight="18dp" android:paddingTop="16dp" android:paddingBottom="16dp" android:layout_marginTop="18dp">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/badge_soxl" android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="3dp" android:paddingBottom="3dp" android:text="SOXX 預估價 → SOXL、USD" android:textSize="13sp" android:textStyle="bold" android:textColor="#10141C" />
-                <TextView android:id="@+id/soxxChg" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="right" android:text="" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/sub" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SOXL" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/soxl" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="6dp" android:text="3× 槓桿" android:textSize="13sp" android:fontFamily="sans-serif-medium" android:textColor="@color/sub" />
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+                <TextView android:id="@+id/soxlChg" style="@style/Pill" android:text="0.00%" />
             </LinearLayout>
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:gravity="center_vertical">
-                <EditText android:id="@+id/soxxEst" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:background="@drawable/field" android:paddingLeft="12dp" android:paddingRight="12dp" android:paddingTop="8dp" android:paddingBottom="8dp" android:inputType="numberDecimal" android:singleLine="true" android:hint="輸入 SOXX" android:textSize="24sp" android:textStyle="bold" android:textColor="@color/text" android:textColorHint="#9AA3B0" android:imeOptions="actionDone" />
-                <TextView android:id="@+id/soxxMinus" android:gravity="center" android:text="−0.5%" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/down" android:background="@drawable/chip" android:clickable="true" android:focusable="true" android:layout_width="68dp" android:layout_height="48dp" android:layout_marginLeft="8dp" />
-                <TextView android:id="@+id/soxxPlus" android:gravity="center" android:text="+0.5%" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/up" android:background="@drawable/chip" android:clickable="true" android:focusable="true" android:layout_width="68dp" android:layout_height="48dp" android:layout_marginLeft="8dp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="bottom" android:layout_marginTop="8dp">
+                <TextView android:id="@+id/result" style="@style/Price" android:layout_width="0dp" android:layout_weight="1" android:text="—" android:textSize="46sp" android:textColor="@color/soxl" />
+                <TextView android:id="@+id/soxlShares" style="@style/Shares" android:layout_width="wrap_content" android:layout_marginBottom="6dp" android:text="" />
             </LinearLayout>
-            <TextView android:id="@+id/soxxLive" android:gravity="center" android:text="帶入現價" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/accent" android:background="@drawable/chip" android:clickable="true" android:focusable="true" android:layout_width="match_parent" android:layout_height="40dp" android:layout_marginTop="8dp" android:visibility="gone" />
         </LinearLayout>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/card" android:padding="12dp" android:layout_marginTop="12dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/card" android:paddingLeft="18dp" android:paddingRight="18dp" android:paddingTop="16dp" android:paddingBottom="16dp" android:layout_marginTop="12dp">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/badge_usd" android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="3dp" android:paddingBottom="3dp" android:text="道瓊半導體指數預估 → USD" android:textSize="13sp" android:textStyle="bold" android:textColor="#10141C" />
-                <TextView android:id="@+id/djChg" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="right" android:text="" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/sub" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="USD" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/usd" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="6dp" android:text="2× 槓桿" android:textSize="13sp" android:fontFamily="sans-serif-medium" android:textColor="@color/sub" />
             </LinearLayout>
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:gravity="center_vertical">
-                <EditText android:id="@+id/djEst" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:background="@drawable/field" android:paddingLeft="12dp" android:paddingRight="12dp" android:paddingTop="8dp" android:paddingBottom="8dp" android:inputType="numberDecimal" android:singleLine="true" android:hint="輸入指數" android:textSize="24sp" android:textStyle="bold" android:textColor="@color/text" android:textColorHint="#9AA3B0" android:imeOptions="actionDone" />
-                <TextView android:id="@+id/djMinus" android:gravity="center" android:text="−0.5%" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/down" android:background="@drawable/chip" android:clickable="true" android:focusable="true" android:layout_width="68dp" android:layout_height="48dp" android:layout_marginLeft="8dp" />
-                <TextView android:id="@+id/djPlus" android:gravity="center" android:text="+0.5%" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/up" android:background="@drawable/chip" android:clickable="true" android:focusable="true" android:layout_width="68dp" android:layout_height="48dp" android:layout_marginLeft="8dp" />
-            </LinearLayout>
-            <TextView android:id="@+id/djLive" android:gravity="center" android:text="帶入現價" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/accent" android:background="@drawable/chip" android:clickable="true" android:focusable="true" android:layout_width="match_parent" android:layout_height="40dp" android:layout_marginTop="8dp" android:visibility="gone" />
-        </LinearLayout>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/card" android:padding="12dp" android:layout_marginTop="12dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="投入金額" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/text" />
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:gravity="center_vertical">
-                <EditText android:id="@+id/amount" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:background="@drawable/field" android:paddingLeft="12dp" android:paddingRight="12dp" android:paddingTop="8dp" android:paddingBottom="8dp" android:inputType="numberDecimal" android:singleLine="true" android:hint="輸入金額" android:textSize="24sp" android:textStyle="bold" android:textColor="@color/text" android:textColorHint="#9AA3B0" android:imeOptions="actionDone" />
-                <TextView android:id="@+id/curTwd" android:layout_width="60dp" android:layout_height="48dp" android:layout_marginLeft="8dp" android:gravity="center" android:text="台幣" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/text" android:background="@drawable/chip" android:clickable="true" android:focusable="true" />
-                <TextView android:id="@+id/curUsd" android:layout_width="60dp" android:layout_height="48dp" android:layout_marginLeft="8dp" android:gravity="center" android:text="美金" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/text" android:background="@drawable/chip" android:clickable="true" android:focusable="true" />
-            </LinearLayout>
-            <LinearLayout android:id="@+id/rateRow" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:gravity="center_vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="匯率 1 美金 =" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/sub" />
-                <EditText android:id="@+id/rate" android:layout_width="96dp" android:layout_height="wrap_content" android:layout_marginLeft="8dp" android:layout_marginRight="8dp" android:background="@drawable/field" android:padding="8dp" android:gravity="center" android:inputType="numberDecimal" android:singleLine="true" android:hint="0.00" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/text" android:textColorHint="#9AA3B0" android:imeOptions="actionDone" />
-                <TextView android:id="@+id/rateInfo" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="台幣" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/sub" />
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/card" android:padding="12dp" android:layout_marginTop="12dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="昨日收盤" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/text" />
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:baselineAligned="false">
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SOXX" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/sub" />
-                    <EditText android:id="@+id/soxxPrev" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:background="@drawable/field" android:padding="8dp" android:inputType="numberDecimal" android:singleLine="true" android:hint="0.00" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/text" android:textColorHint="#9AA3B0" android:imeOptions="actionDone" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="12dp" android:baselineAligned="false">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:paddingRight="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="以 SOXX 推算" android:textSize="13sp" android:fontFamily="sans-serif-medium" android:textColor="@color/sub" />
+                    <TextView android:id="@+id/resultUsdSoxx" style="@style/Price" android:layout_width="match_parent" android:layout_marginTop="6dp" android:text="—" android:textSize="34sp" android:textColor="@color/usd" />
+                    <TextView android:id="@+id/usdSoxxChg" style="@style/Pill" android:layout_marginTop="8dp" android:text="0.00%" />
+                    <TextView android:id="@+id/usdSoxxShares" style="@style/Shares" android:layout_width="match_parent" android:layout_marginTop="8dp" android:text="" />
                 </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginLeft="8dp" android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SOXL" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/sub" />
-                    <EditText android:id="@+id/soxlPrev" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:background="@drawable/field" android:padding="8dp" android:inputType="numberDecimal" android:singleLine="true" android:hint="0.00" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/text" android:textColorHint="#9AA3B0" android:imeOptions="actionDone" />
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="10dp" android:baselineAligned="false">
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="道瓊半導體指數" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/sub" />
-                    <EditText android:id="@+id/djPrev" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:background="@drawable/field" android:padding="8dp" android:inputType="numberDecimal" android:singleLine="true" android:hint="0.00" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/text" android:textColorHint="#9AA3B0" android:imeOptions="actionDone" />
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginLeft="8dp" android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="USD" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/sub" />
-                    <EditText android:id="@+id/usdPrev" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:background="@drawable/field" android:padding="8dp" android:inputType="numberDecimal" android:singleLine="true" android:hint="0.00" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/text" android:textColorHint="#9AA3B0" android:imeOptions="actionDone" />
+                <View android:layout_width="1px" android:layout_height="match_parent" android:background="@color/separator" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:paddingLeft="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="以道瓊指數推算" android:textSize="13sp" android:fontFamily="sans-serif-medium" android:textColor="@color/sub" />
+                    <TextView android:id="@+id/resultUsd" style="@style/Price" android:layout_width="match_parent" android:layout_marginTop="6dp" android:text="—" android:textSize="34sp" android:textColor="@color/usd" />
+                    <TextView android:id="@+id/usdChg" style="@style/Pill" android:layout_marginTop="8dp" android:text="0.00%" />
+                    <TextView android:id="@+id/usdShares" style="@style/Shares" android:layout_width="match_parent" android:layout_marginTop="8dp" android:text="" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="推算價 = 昨收 ×（1 + 倍數 × 漲跌幅），為理論值。USD 實際追蹤道瓊美國半導體指數（DJUSSC），以 SOXX 推算的 USD 誤差較大。可買股數為整股，未計手續費；匯率為市場中價，銀行實際換匯價會略高。" android:textSize="12sp" android:textColor="@color/sub" android:layout_marginTop="12dp" />
+        <TextView android:id="@+id/hint" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingLeft="16dp" android:layout_marginTop="10dp" android:text="輸入預估價開始推算" android:textSize="13sp" android:textColor="@color/sub" />
+        <TextView style="@style/SectionHeader" android:layout_marginTop="18dp" android:text="今日預估" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/group">
+            <LinearLayout style="@style/Row">
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+                    <TextView style="@style/RowLabel" android:text="SOXX" />
+                    <TextView android:id="@+id/soxxChg" style="@style/RowSub" android:fontFamily="sans-serif-medium" android:text="預估價" />
+                </LinearLayout>
+                <EditText android:id="@+id/soxxEst" style="@style/RowValue" android:hint="輸入價格" />
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="8dp" android:orientation="horizontal" android:gravity="center_vertical" android:background="@drawable/seg">
+                    <TextView android:id="@+id/soxxMinus" style="@style/Seg" android:layout_width="44dp" android:layout_height="36dp" android:text="−" android:textSize="20sp" android:background="@drawable/press" />
+                    <View android:layout_width="1px" android:layout_height="18dp" android:background="@color/separator" />
+                    <TextView android:id="@+id/soxxPlus" style="@style/Seg" android:layout_width="44dp" android:layout_height="36dp" android:text="+" android:textSize="20sp" android:background="@drawable/press" />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView android:id="@+id/soxxLive" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingLeft="16dp" android:paddingRight="16dp" android:paddingTop="2dp" android:paddingBottom="14dp" android:text="帶入現價" android:textSize="15sp" android:fontFamily="sans-serif-medium" android:textColor="@color/accent" android:clickable="true" android:focusable="true" android:visibility="gone" />
+            <View style="@style/Sep" />
+            <LinearLayout style="@style/Row">
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+                    <TextView style="@style/RowLabel" android:text="道瓊半導體" />
+                    <TextView android:id="@+id/djChg" style="@style/RowSub" android:fontFamily="sans-serif-medium" android:text="預估價" />
+                </LinearLayout>
+                <EditText android:id="@+id/djEst" style="@style/RowValue" android:hint="輸入點數" />
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="8dp" android:orientation="horizontal" android:gravity="center_vertical" android:background="@drawable/seg">
+                    <TextView android:id="@+id/djMinus" style="@style/Seg" android:layout_width="44dp" android:layout_height="36dp" android:text="−" android:textSize="20sp" android:background="@drawable/press" />
+                    <View android:layout_width="1px" android:layout_height="18dp" android:background="@color/separator" />
+                    <TextView android:id="@+id/djPlus" style="@style/Seg" android:layout_width="44dp" android:layout_height="36dp" android:text="+" android:textSize="20sp" android:background="@drawable/press" />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView android:id="@+id/djLive" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingLeft="16dp" android:paddingRight="16dp" android:paddingTop="2dp" android:paddingBottom="14dp" android:text="帶入現價" android:textSize="15sp" android:fontFamily="sans-serif-medium" android:textColor="@color/accent" android:clickable="true" android:focusable="true" android:visibility="gone" />
+        </LinearLayout>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingLeft="16dp" android:paddingRight="16dp" android:layout_marginTop="8dp" android:text="− ／ + 每次調整昨收的 0.5%" android:textSize="13sp" android:textColor="@color/sub" />
+        <TextView style="@style/SectionHeader" android:text="投入金額" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/group">
+            <LinearLayout style="@style/Row">
+                <TextView style="@style/RowLabel" android:text="金額" />
+                <EditText android:id="@+id/amount" style="@style/RowValue" android:hint="0" android:textSize="22sp" />
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="8dp" android:orientation="horizontal" android:padding="2dp" android:background="@drawable/seg">
+                    <TextView android:id="@+id/curTwd" style="@style/Seg" android:layout_width="52dp" android:text="台幣" />
+                    <TextView android:id="@+id/curUsd" style="@style/Seg" android:layout_width="52dp" android:text="美金" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/rateRow" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                <View style="@style/Sep" />
+                <LinearLayout style="@style/Row">
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+                        <TextView style="@style/RowLabel" android:text="匯率" />
+                        <TextView android:id="@+id/rateInfo" style="@style/RowSub" android:text="1 美金兌台幣" />
+                    </LinearLayout>
+                    <EditText android:id="@+id/rate" style="@style/RowValue" android:hint="0.000" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView style="@style/SectionHeader" android:text="昨日收盤" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/group">
+            <LinearLayout style="@style/Row" android:minHeight="50dp">
+                <TextView style="@style/RowLabel" android:text="SOXX" />
+                <TextView style="@style/RowSub" android:layout_marginLeft="8dp" android:text="" />
+                <EditText android:id="@+id/soxxPrev" style="@style/RowValue" android:hint="0.00" android:textSize="18sp" android:paddingTop="12dp" android:paddingBottom="12dp" />
+            </LinearLayout>
+            <View style="@style/Sep" />
+            <LinearLayout style="@style/Row" android:minHeight="50dp">
+                <TextView style="@style/RowLabel" android:text="SOXL" />
+                <TextView style="@style/RowSub" android:layout_marginLeft="8dp" android:text="3×" />
+                <EditText android:id="@+id/soxlPrev" style="@style/RowValue" android:hint="0.00" android:textSize="18sp" android:paddingTop="12dp" android:paddingBottom="12dp" />
+            </LinearLayout>
+            <View style="@style/Sep" />
+            <LinearLayout style="@style/Row" android:minHeight="50dp">
+                <TextView style="@style/RowLabel" android:text="道瓊半導體" />
+                <TextView style="@style/RowSub" android:layout_marginLeft="8dp" android:text="指數" />
+                <EditText android:id="@+id/djPrev" style="@style/RowValue" android:hint="0.00" android:textSize="18sp" android:paddingTop="12dp" android:paddingBottom="12dp" />
+            </LinearLayout>
+            <View style="@style/Sep" />
+            <LinearLayout style="@style/Row" android:minHeight="50dp">
+                <TextView style="@style/RowLabel" android:text="USD" />
+                <TextView style="@style/RowSub" android:layout_marginLeft="8dp" android:text="2×" />
+                <EditText android:id="@+id/usdPrev" style="@style/RowValue" android:hint="0.00" android:textSize="18sp" android:paddingTop="12dp" android:paddingBottom="12dp" />
+            </LinearLayout>
+        </LinearLayout>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingLeft="16dp" android:paddingRight="16dp" android:layout_marginTop="10dp" android:lineSpacingExtra="3dp" android:text="推算價 = 昨收 ×（1 + 倍數 × 漲跌幅），為理論值。USD 實際追蹤道瓊美國半導體指數，以 SOXX 推算的誤差較大。可買股數為整股，未計手續費；匯率為市場中價，銀行實際換匯價會略高。" android:textSize="13sp" android:textColor="@color/sub" />
     </LinearLayout>
 </ScrollView>
